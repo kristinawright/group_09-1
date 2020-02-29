@@ -1821,9 +1821,8 @@ kable(head(df),
 ## at the below quantile
 p.lvl &lt;- 0.975 #probability level
 qtile &lt;- quantile(df$price, probs=p.lvl) #quantile at designated probability level</code></pre>
-<p>A kernel density plot is presented for listing prices of all listings (on the left) and listings excluding the top 2.5% (on the right). We see that a few outliers extremely skews the density of all listings far to the right. Using the <code>R</code> functions, <code>mean()</code>, <code>quantile()</code>, and <code>max()</code>, respectively, we see that the mean listing price for all listings is 134.587429, the 3rd quartile for all listings is 105, while the maximum listing price of all listings is 1.510^{4}.</p>
-<p>As a result, we exclude the top 2.5% of listings. The maximum allowed listing price is 500. The resulting filtered tibble has 464.</p>
-<p>0, 39, 60, 134.587429, 105, 1.510^{4}</p>
+<p>A kernel density plot is presented for listing prices of all listings (on the left) and listings excluding the top 2.5% (on the right). We see that a few outliers extremely skews the density of all listings far to the right. Using the <code>R</code> functions, <code>mean()</code>, <code>quantile()</code>, and <code>max()</code>, respectively, we see that the mean listing price for all listings is 134.59, the 3rd quartile for all listings is 105, while the maximum listing price of all listings is 15000.</p>
+<p>As a result, we exclude the top 2.5% of listings. The maximum allowed listing price is the filtered dataset is 500. The filter eliminated 464 rows, so that the filtered tibble has 19964 observations.</p>
 <pre class="r"><code>p1 &lt;- df %&gt;% 
   ggplot(aes(x=price)) + 
   geom_density() +

@@ -175,7 +175,7 @@ p2 <- df %>%
 grid.arrange(p1, p2, nrow=1)
 ```
 
-![Plot (a) presents the Kernel density of listing prices for Barcelona; Plot (b) presents the Kernel density of listing prices for Barcelona where the price per night is less than 500](milestone01_files/figure-html/price-density-1.png)
+![Plot (a) presents the Kernel density of listing prices for Barcelona; Plot (b) presents the Kernel density of listing prices for Barcelona where the price per night is less than 500 euros](/Users/danielhadley/Documents/git_docs/STAT547M/Project/milestone01/milestone01_files/price-density-1.png)
 
 #### Proportional Bar Chart
 

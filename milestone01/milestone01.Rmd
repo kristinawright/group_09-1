@@ -22,6 +22,15 @@ library(tidyverse)
 library(DT) #In order to use the datatable() function for viewing tibbles
 library(gridExtra) #used to arrange plots with grid.arrange()
 
+## Custom Functions
+## Round numeric data explicitly turning off scientific notation
+## Output from function is a number returned as a character string
+rnd <- function(x, d) {
+  # x is a number to round
+  # d is the number of digits
+  format(round(x, digits=d), scientific=FALSE)
+}
+
 ```
 
 ## Airbnb Listings for Barcelona
@@ -140,11 +149,10 @@ p.lvl <- 0.975 #probability level
 qtile <- quantile(df$price, probs=p.lvl) #quantile at designated probability level
 ```
 
-A kernel density plot is presented for listing prices of all listings (on the left) and listings excluding the top `r 100 - p.lvl*100`% (on the right). We see that a few outliers extremely skews the density of all listings far to the right. Using the `R` functions, `mean()`, `quantile()`, and `max()`, respectively, we see that the mean listing price for all listings is `r mean(df$price)`, the 3rd quartile for all listings is `r quantile(df$price, probs=0.75)`, while the maximum listing price of all listings is `r max(df$price)`. 
+A kernel density plot is presented for listing prices of all listings (on the left) and listings excluding the top `r 100 - p.lvl*100`% (on the right). We see that a few outliers extremely skews the density of all listings far to the right. Using the `R` functions, `mean()`, `quantile()`, and `max()`, respectively, we see that the mean listing price for all listings is `r rnd(mean(df$price), 2)`, the 3rd quartile for all listings is `r quantile(df$price, probs=0.75)`, while the maximum listing price of all listings is `r rnd(max(df$price))`. 
 
-As a result, we exclude the top `r 100 - p.lvl*100`% of listings. The maximum allowed listing price is `r qtile`. The resulting filtered tibble has `r nrow(df) - nrow(df %>% filter(price <= quantile(df$price, probs=p.lvl)))`.
+As a result, we exclude the top `r 100 - p.lvl*100`% of listings. The maximum allowed listing price is the filtered dataset is `r qtile`. The filter eliminated `r nrow(df) - nrow(df %>% filter(price <= quantile(df$price, probs=p.lvl)))` rows, so that the filtered tibble has `r nrow(df %>% filter(price <= quantile(df$price, probs=p.lvl)))` observations.
 
-`r summary(df$price)`
 
 ```{r price-density, fig.width=8, fig.height=4, fig.cap=paste("Plot (a) presents the Kernel density of listing prices for Barcelona; Plot (b) presents the Kernel density of listing prices for Barcelona where the price per night is less than", qtile, "euros")}
 p1 <- df %>% 

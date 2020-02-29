@@ -7,17 +7,22 @@ output:
   html_document:
     keep_md: yes
     toc: true
+    toc_float: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 
 
-## Airbnb Listings for Barcelona, Spain
+## Airbnb Listings for Barcelona
 
 ### Introduction
 
 Airbnb, Inc. is a company founded in 2008 that offers an online marketplace connecting people who offer lodging with people who require accomodations in that locale. The company does not own any of the listed properties and operates as a broker, collecting commissions once a lodging is booked. As a direct competitor to hotels, we are interested in how the users listing properties determine the price they charge.
 
 When accomodations are offered through Airbnb, the person listing the property is called a host, and they must provide a variety of information about the listing including price, neighborhood, type of accommodations offered, and the minimum number of nights a guest must stay if they want to make a booking. In addition to information provided by the host, Airbnb collects and disseminates information about the listing which we use to perform our analysis.
+
+The data is collected using public information compiled from the Airbnb website. Specific collection techniques are not specified, though the Inside Airbnb [website](http://insideairbnb.com/behind.html) states that it uses Open Source technologies such as D3, Boostrap, jQuery, etc. to collect the data and much code was "copied and pasted" from the internet. A major contributer to this code, [Tom Slee](http://tomslee.net/category/airbnb-data), described it as a "scrape" of the Airbnb website for each city.
 
 
 ### Data Description
@@ -49,41 +54,128 @@ The data used in this analysis was compiled on November 9, 2019 and includes 20,
 
 
 ```r
-# First we read in the dataset.
+# This chunk reads the csv data into R
+
+## Specify filename using here::here() so it can be used by anyone
 filename <- here::here("data", "listings-Barcelona.csv")
-df <- read_csv(file=filename)
+
+## column types are specified to avoid the printing of this message
+## by the read_csv() function
+col_types <- cols(
+  id = col_double(),
+  name = col_character(),
+  host_id = col_double(),
+  host_name = col_character(),
+  neighbourhood_group = col_character(),
+  neighbourhood = col_character(),
+  latitude = col_double(),
+  longitude = col_double(),
+  room_type = col_character(),
+  price = col_double(),
+  minimum_nights = col_double(),
+  number_of_reviews = col_double(),
+  last_review = col_date(format = ""),
+  reviews_per_month = col_double(),
+  calculated_host_listings_count = col_double(),
+  availability_365 = col_double()
+)
+
+## Read in dataset and call it df
+df <- read_csv(file=filename, col_types=col_types)
 ```
 
-```
-## Parsed with column specification:
-## cols(
-##   id = col_double(),
-##   name = col_character(),
-##   host_id = col_double(),
-##   host_name = col_character(),
-##   neighbourhood_group = col_character(),
-##   neighbourhood = col_character(),
-##   latitude = col_double(),
-##   longitude = col_double(),
-##   room_type = col_character(),
-##   price = col_double(),
-##   minimum_nights = col_double(),
-##   number_of_reviews = col_double(),
-##   last_review = col_date(format = ""),
-##   reviews_per_month = col_double(),
-##   calculated_host_listings_count = col_double(),
-##   availability_365 = col_double()
-## )
+#### Remove Unwanted Data
+
+In this section, we remove columns from the dataset that should have no fundamental influence on listing price. This includes the short title of th listing (`name`), the name of the host(s) (`host_name`), and the availability of the listing over the next 365 days (`availability_365`). While there might end up being a relation between availability and price, since cheap listings for a desirable neighbourhood are likely to be booked, this relationship is backwards; we want to find factors that affect the listing price, not factors affected by the listing price. 
+
+
+```r
+## Remove three unwanted columns
+df <- df %>% 
+  select(-name,
+         -host_name,
+         -availability_365)
 ```
 
-#### Correlations
+#### Rename Columns
+
+Some of the column names are a little long, so we perform the following renamings:
+  
+  - `neighbourhood_group` is renamed to `district`
+  
+  - `minimum_nights` is renamed to `min_stay`
+  
+  - `number_of_reviews` is renamed to `reviews`
+  
+  - `calculated_host_listings_count` is renamed to `host_listings`
+  
+
+```r
+## Code to rename columns
+df <- df %>% 
+  rename(district = neighbourhood_group,
+         min_stay = minimum_nights,
+         reviews = number_of_reviews,
+         host_listings = calculated_host_listings_count)
+
+## View changes
+kable(head(df),
+      caption="The first 6 rows of the Barcelona listings dataset after removing unwanted columns and renaming certain columns")
+```
 
 
+
+Table: The first 6 rows of the Barcelona listings dataset after removing unwanted columns and renaming certain columns
+
+    id   host_id  district     neighbourhood                         latitude   longitude  room_type          price   min_stay   reviews  last_review    reviews_per_month   host_listings
+------  --------  -----------  -----------------------------------  ---------  ----------  ----------------  ------  ---------  --------  ------------  ------------------  --------------
+ 18666     71615  Sant Martí   el Camp de l'Arpa del Clot            41.40889     2.18555  Entire home/apt      130          3         1  2015-10-10                  0.02              30
+ 18674     71615  Eixample     la Sagrada Família                    41.40420     2.17306  Entire home/apt       60          1        20  2019-10-19                  0.25              30
+ 23197     90417  Sant Martí   el Besòs i el Maresme                 41.41203     2.22114  Entire home/apt      210          3        51  2019-09-29                  0.48               2
+ 25786    108310  Gràcia       la Vila de Gràcia                     41.40145     2.15645  Private room          32          1       268  2019-11-06                  2.38               1
+ 31958    136853  Gràcia       el Camp d'en Grassot i Gràcia Nova    41.40950     2.15938  Entire home/apt       60          1       182  2019-10-16                  1.71              39
+ 32471    136853  Gràcia       el Camp d'en Grassot i Gràcia Nova    41.40928     2.16112  Entire home/apt       70          1        90  2019-11-05                  0.84              39
 
 
 #### Price Density
 
 
+```r
+## We exclude price by placing an upper bound on listing price per night
+## at the below quantile
+p.lvl <- 0.975 #probability level
+qtile <- quantile(df$price, probs=p.lvl) #quantile at designated probability level
+```
+
+A kernel density plot is presented for listing prices of all listings (on the left) and listings excluding the top 2.5% (on the right). We see that a few outliers extremely skews the density of all listings far to the right. Using the `R` functions, `mean()`, `quantile()`, and `max()`, respectively, we see that the mean listing price for all listings is 134.587429, the 3rd quartile for all listings is 105, while the maximum listing price of all listings is 1.5\times 10^{4}. 
+
+As a result, we exclude the top 2.5% of listings. The maximum allowed listing price is 500. The resulting filtered tibble has 464.
+
+0, 39, 60, 134.587429, 105, 1.5\times 10^{4}
+
+
+```r
+p1 <- df %>% 
+  ggplot(aes(x=price)) + 
+  geom_density() +
+  theme_bw() +
+  ggtitle(label="(a) Density for Prices of All Listings") +
+  scale_x_continuous("Listing Price per Night", labels=scales::dollar_format(suffix="\u20AC", prefix='')) +
+  ylab("Density")
+
+p2 <- df %>% 
+  filter(price <= quantile(df$price, probs=0.975)) %>% 
+  ggplot(aes(x=price)) + 
+  geom_density() +
+  theme_bw() +
+  ggtitle(label="(b) Density for Prices of All Listings") +
+  scale_x_continuous("Listing Price per Night", labels=scales::dollar_format(suffix="\u20AC", prefix='')) +
+  ylab("Density")
+
+grid.arrange(p1, p2, nrow=1)
+```
+
+![Plot (a) presents the Kernel density of listing prices for Barcelona; Plot (b) presents the Kernel density of listing prices for Barcelona where the price per night is less than 500](milestone01_files/figure-html/price-density-1.png)
 
 #### Proportional Bar Chart
 

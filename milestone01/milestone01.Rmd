@@ -21,6 +21,7 @@ library(knitr)
 library(tidyverse)
 library(DT) #In order to use the datatable() function for viewing tibbles
 library(gridExtra) #used to arrange plots with grid.arrange()
+library(corrplot) # used to make correllogram plot
 
 ## Custom Functions
 ## Round numeric data explicitly turning off scientific notation
@@ -175,9 +176,51 @@ p2 <- df %>%
 grid.arrange(p1, p2, nrow=1)
 ```
 
-#### Proportional Bar Chart
+#### Correllogram
 
-```{r proportion}
+```{r correllogram}
+# take numerical values from df only into new dataframe dfcor
+dfcor <- df %>%
+  select(latitude,
+         longitude,
+         price,
+         min_stay,
+         reviews,
+         host_listings)
+# calculate the correlation of each column against all other columns
+df_correlations <- cor(dfcor) 
+
+# plot the correllogram with corrplot
+corrplot(df_correlations, 
+         type="full", 
+         method="color", # colour scale plot
+         tl.srt=45, #text angled for better viewing
+         addCoef.col = "black", # Add correlation coefficient
+         diag = FALSE)
+```
+
+#### Violin Plot
+
+```{r violin plot warning=FALSE}
+# calculate the mean price for each district for plot ordering
+mean_price<-df%>%
+  group_by(district) %>%
+  summarize(mean = mean(price)) %>%
+  arrange(desc(mean)) # mean price in descending order
+  
+q<-df%>%
+  mutate(district = factor(district, levels = unique(factor_district$district))) %>% #factor district by descending mean price
+  ggplot(aes(district, price)) +
+  geom_violin(stat = "ydensity") +
+  scale_y_log10() +  # change to log10 scale 
+  ylab("Price (€)") +
+  xlab("District") +
+  ggtitle("Distribution of Price for Each Barcelona District")
+
+q + theme(axis.text.x = element_text(angle = 60, hjust = 1))  # x axis labels angled to view text clearly
+
+
+
 ```
 
 ### Research Question

@@ -178,6 +178,8 @@ grid.arrange(p1, p2, nrow=1)
 
 #### Correllogram
 
+Based on the correllogram shown below there is little correlation between the 6 numerical variables presented. All positive correlations are in blue, and all negative correlations are in red.
+
 ```{r correllogram}
 # take numerical values from df only into new dataframe dfcor
 dfcor <- df %>%
@@ -201,7 +203,9 @@ corrplot(df_correlations,
 
 #### Violin Plot
 
-```{r violin plot warning=FALSE}
+The violin plot below shows the distribution of price in log10 scale for each district in descending order of average price. Based on the plot, Eixample has the highest priced and Nou Barris has the lowest priced listings.
+
+```{r violin plot, warning=FALSE}
 # calculate the mean price for each district for plot ordering
 mean_price<-df%>%
   group_by(district) %>%
@@ -209,18 +213,15 @@ mean_price<-df%>%
   arrange(desc(mean)) # mean price in descending order
   
 q<-df%>%
-  mutate(district = factor(district, levels = unique(factor_district$district))) %>% #factor district by descending mean price
+  mutate(district = factor(district, levels = unique(mean_price$district))) %>% #factor district by descending mean price
   ggplot(aes(district, price)) +
   geom_violin(stat = "ydensity") +
-  scale_y_log10() +  # change to log10 scale 
+  scale_y_log10() +  # change to log10 scale since density of price is scewed
   ylab("Price (€)") +
   xlab("District") +
   ggtitle("Distribution of Price for Each Barcelona District")
 
 q + theme(axis.text.x = element_text(angle = 60, hjust = 1))  # x axis labels angled to view text clearly
-
-
-
 ```
 
 ### Research Question
@@ -229,7 +230,8 @@ In this analysis, we determine which factors are significantly related to the pr
 
 ### Plan of Action
 
-With our research question, the first goal is to determine which factors are most important to explaining list price. This may require some data transformation, handling or removal of outliers, and removing incomplete observations.
+With our research question, the first goal is to determine which factors are most important to explaining list price and perform a linear regression analysis. This may require some data transformation, handling or removal of outliers, and removing incomplete observations.
 
 ### References
 
+[Airbnb dataset](http://insideairbnb.com/get-the-data.html)

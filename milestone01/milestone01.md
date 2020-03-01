@@ -174,11 +174,61 @@ p2 <- df %>%
 grid.arrange(p1, p2, nrow=1)
 ```
 
-![Plot (a) presents the Kernel density of listing prices for Barcelona; Plot (b) presents the Kernel density of listing prices for Barcelona where the price per night is less than 500 euros](/Users/danielhadley/Documents/git_docs/STAT547M/Project/milestone01/milestone01_files/price-density-1.png)
+![Plot (a) presents the Kernel density of listing prices for Barcelona; Plot (b) presents the Kernel density of listing prices for Barcelona where the price per night is less than 500 euros](/Users/sunshine2.0/Desktop/STAT547/Project/group_09/group_09/milestone01/milestone01_files/price-density-1.png)
 
-#### Proportional Bar Chart
+#### Correllogram
+
+Based on the correllogram shown below there is little correlation between the 6 numerical variables presented. All positive correlations are in blue, and all negative correlations are in red.
 
 
+```r
+# take numerical values from df only into new dataframe dfcor
+dfcor <- df %>%
+  select(latitude,
+         longitude,
+         price,
+         min_stay,
+         reviews,
+         host_listings)
+# calculate the correlation of each column against all other columns
+df_correlations <- cor(dfcor) 
+
+# plot the correllogram with corrplot
+corrplot(df_correlations, 
+         type="full", 
+         method="color", # colour scale plot
+         tl.srt=45, #text angled for better viewing
+         addCoef.col = "black", # Add correlation coefficient
+         diag = FALSE)
+```
+
+![](/Users/sunshine2.0/Desktop/STAT547/Project/group_09/group_09/milestone01/milestone01_files/correllogram-1.png)<!-- -->
+
+#### Violin Plot
+
+The violin plot below shows the distribution of price in log10 scale for each district in descending order of average price. Based on the plot, Eixample has the highest priced and Nou Barris has the lowest priced listings.
+
+
+```r
+# calculate the mean price for each district for plot ordering
+mean_price<-df%>%
+  group_by(district) %>%
+  summarize(mean = mean(price)) %>%
+  arrange(desc(mean)) # mean price in descending order
+  
+q<-df%>%
+  mutate(district = factor(district, levels = unique(mean_price$district))) %>% #factor district by descending mean price
+  ggplot(aes(district, price)) +
+  geom_violin(stat = "ydensity") +
+  scale_y_log10() +  # change to log10 scale since density of price is scewed
+  ylab("Price (€)") +
+  xlab("District") +
+  ggtitle("Distribution of Price for Each Barcelona District")
+
+q + theme(axis.text.x = element_text(angle = 60, hjust = 1))  # x axis labels angled to view text clearly
+```
+
+![](/Users/sunshine2.0/Desktop/STAT547/Project/group_09/group_09/milestone01/milestone01_files/violin plot-1.png)<!-- -->
 
 ### Research Question
 
@@ -186,7 +236,8 @@ In this analysis, we determine which factors are significantly related to the pr
 
 ### Plan of Action
 
-With our research question, the first goal is to determine which factors are most important to explaining list price. This may require some data transformation, handling or removal of outliers, and removing incomplete observations.
+With our research question, the first goal is to determine which factors are most important to explaining list price and perform a linear regression analysis. This may require some data transformation, handling or removal of outliers, and removing incomplete observations.
 
 ### References
 
+[Airbnb dataset](http://insideairbnb.com/get-the-data.html)

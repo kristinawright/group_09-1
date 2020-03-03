@@ -173,7 +173,7 @@ p2 <- df %>%
 grid.arrange(p1, p2, nrow=1)
 ```
 
-![Plot (a) presents the Kernel density of listing prices for Barcelona; Plot (b) presents the Kernel density of listing prices for Barcelona where the price per night is less than 500 euros](/Users/sunshine2.0/Desktop/STAT547/Project/group_09/group_09/milestone01/milestone01_files/price-density-1.png)
+![Plot (a) presents the Kernel density of listing prices for Barcelona; Plot (b) presents the Kernel density of listing prices for Barcelona where the price per night is less than 500 euros](/Users/danielhadley/Documents/git_docs/STAT547M/Project/milestone01/milestone01_files/price-density-1.png)
 
 #### Correllogram
 
@@ -201,7 +201,7 @@ corrplot(df_correlations,
          diag = FALSE)
 ```
 
-![](/Users/sunshine2.0/Desktop/STAT547/Project/group_09/group_09/milestone01/milestone01_files/correllogram-1.png)<!-- -->
+![](/Users/danielhadley/Documents/git_docs/STAT547M/Project/milestone01/milestone01_files/correllogram-1.png)<!-- -->
 
 #### Violin Plot
 
@@ -227,7 +227,7 @@ q<-df%>%
 q + theme(axis.text.x = element_text(angle = 60, hjust = 1))  # x axis labels angled to view text clearly
 ```
 
-![](/Users/sunshine2.0/Desktop/STAT547/Project/group_09/group_09/milestone01/milestone01_files/violin plot-1.png)<!-- -->
+![](/Users/danielhadley/Documents/git_docs/STAT547M/Project/milestone01/milestone01_files/violin plot-1.png)<!-- -->
 
 ### Research Question
 

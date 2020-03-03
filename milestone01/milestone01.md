@@ -150,6 +150,7 @@ A kernel density plot is presented for listing prices of all listings (on the le
 
 As a result, we exclude the top 2.5% of listings. The maximum allowed listing price is the filtered dataset is 500. The filter eliminated 464 rows, so that the filtered tibble has 19964 observations.
 
+An interesting observation from the price density for listings under 500 Euros is the tendency for people to price their listings in increments of 50 Euros. For example, the Density Plot (b), we see multi-modes, where each mode after the largest mode occurs at every 50 Euro increment along the x-axis.
 
 
 ```r
@@ -157,7 +158,7 @@ p1 <- df %>%
   ggplot(aes(x=price)) + 
   geom_density() +
   theme_bw() +
-  ggtitle(label="(a) Density for Prices of All Listings") +
+  ggtitle(label="(a) Price Density for All Listings") +
   scale_x_continuous("Listing Price per Night", labels=scales::dollar_format(suffix="\u20AC", prefix='')) +
   ylab("Density")
 
@@ -166,14 +167,14 @@ p2 <- df %>%
   ggplot(aes(x=price)) + 
   geom_density() +
   theme_bw() +
-  ggtitle(label="(b) Density for Prices of All Listings") +
+  ggtitle(label=paste("(b) Price Density of Listings under", qtile, "Euros")) +
   scale_x_continuous("Listing Price per Night", labels=scales::dollar_format(suffix="\u20AC", prefix='')) +
   ylab("Density")
 
 grid.arrange(p1, p2, nrow=1)
 ```
 
-![Plot (a) presents the Kernel density of listing prices for Barcelona; Plot (b) presents the Kernel density of listing prices for Barcelona where the price per night is less than 500 euros](/Users/danielhadley/Documents/git_docs/STAT547M/Project/milestone01/milestone01_files/price-density-1.png)
+![Plot (a) presents the Kernel density of listing prices for Barcelona; Plot (b) presents the Kernel density of listing prices for Barcelona where the price per night is less than 500 Euros](/Users/danielhadley/Documents/git_docs/STAT547M/Project/milestone01/milestone01_files/price-density-1.png)
 
 #### Correllogram
 
@@ -231,7 +232,7 @@ q + theme(axis.text.x = element_text(angle = 60, hjust = 1))  # x axis labels an
 
 ### Research Question
 
-In this analysis, we determine which factors are significantly related to the price of a listing.
+In this analysis, we determine which factors, such as listing neighbourhood, type of room, distance from city center, etc. are significantly related to the price of a listing.
 
 ### Plan of Action 
 

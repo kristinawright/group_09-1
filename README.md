@@ -5,7 +5,7 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
 > This repository houses Group 09's project for STAT 547M taken in Term 2 of the 2019-2020 academic here.
 
 ## 2. Navigating the Repository :file_folder:
-> As milestones are met, filed are placed into the appropriate subfolders. 
+> As milestones are met, files are placed into the appropriate subfolders. 
 
 1. The [data](https://github.com/STAT547-UBC-2019-20/group_09/tree/master/data) folder contains all datasets used throughout the project.
 1. The [docs](https://github.com/STAT547-UBC-2019-20/group_09/tree/master/docs) folder contains all `*.Rmd` files used to create reports.

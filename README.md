@@ -3,6 +3,10 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
 
 ## 1. About This Repository :information_source:
 > This repository houses Group 09's project for STAT 547M taken in Term 2 of the 2019-2020 academic here.
+>
+> Our project uses an Airbnb dataset to try and find significant factors to explain the listing prices (per night) in Barcelona, Spain.
+>
+> The final report is created by meeting milestones which are linked below.
 
 ## 2. Navigating the Repository :file_folder:
 > As milestones are met, files are placed into the appropriate subfolders. 
@@ -10,6 +14,8 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
 1. The [data](https://github.com/STAT547-UBC-2019-20/group_09/tree/master/data) folder contains all datasets used throughout the project.
 1. The [docs](https://github.com/STAT547-UBC-2019-20/group_09/tree/master/docs) folder contains all `*.Rmd` files used to create reports.
 1. The [images](https://github.com/STAT547-UBC-2019-20/group_09/tree/master/images) folder saves all images produced for the group project.
+1. The [scripts](https://github.com/STAT547-UBC-2019-20/group_09/tree/master/scripts) folder saves all `R` scripts (`*.r`) that are called when rendering the project.
+1. The [tests](https://github.com/STAT547-UBC-2019-20/group_09/tree/master/tests) folder contains all tests carried out, this includes `R` Markdown files used to create scripts.
 
 | Milestone | Due Date :date: | Report
 | :--: | ---- | :--------------: |

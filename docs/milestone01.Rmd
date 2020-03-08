@@ -159,7 +159,8 @@ An interesting observation from the price density for listings under `r qtile` E
 p1 <- df %>% 
   ggplot(aes(x=price)) + 
   geom_density() +
-  theme_bw() +
+  theme_bw(14) +
+  theme(plot.title = element_text(size = 12)) +
   ggtitle(label="(a) Price Density for All Listings") +
   scale_x_continuous("Listing Price per Night", labels=scales::dollar_format(suffix="\u20AC", prefix='')) +
   ylab("Density")
@@ -168,7 +169,8 @@ p2 <- df %>%
   filter(price <= quantile(df$price, probs=0.975)) %>% 
   ggplot(aes(x=price)) + 
   geom_density() +
-  theme_bw() +
+  theme_bw(14) +
+  theme(plot.title = element_text(size = 12)) +
   ggtitle(label=paste("(b) Price Density of Listings under", qtile, "Euros")) +
   scale_x_continuous("Listing Price per Night", labels=scales::dollar_format(suffix="\u20AC", prefix='')) +
   ylab("Density")
@@ -194,7 +196,7 @@ df_correlations <- cor(dfcor)
 
 # plot the correllogram with corrplot
 corrplot(df_correlations, 
-         type="full", 
+         type="upper", 
          method="color", # colour scale plot
          tl.srt=45, #text angled for better viewing
          addCoef.col = "black", # Add correlation coefficient
@@ -205,7 +207,7 @@ corrplot(df_correlations,
 
 The violin plot below shows the distribution of price in log10 scale for each district in descending order of average price. Based on the plot, Eixample has the highest priced and Nou Barris has the lowest priced listings.
 
-```{r violin plot, warning=FALSE}
+```{r violin plot, fig.width=7, fig.height=6, warning=FALSE}
 # calculate the mean price for each district for plot ordering
 mean_price<-df%>%
   group_by(district) %>%
@@ -219,7 +221,9 @@ q<-df%>%
   scale_y_log10() +  # change to log10 scale since density of price is scewed
   ylab("Price (€)") +
   xlab("District") +
-  ggtitle("Distribution of Price for Each Barcelona District")
+  ggtitle("Distribution of Price for Each Barcelona District") +
+  theme_bw(15) +
+  theme(plot.title = element_text(size = 14)) 
 
 q + theme(axis.text.x = element_text(angle = 60, hjust = 1))  # x axis labels angled to view text clearly
 ```

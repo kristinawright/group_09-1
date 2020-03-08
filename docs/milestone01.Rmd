@@ -20,7 +20,7 @@ library(knitr)
 library(tidyverse)
 library(DT) #In order to use the datatable() function for viewing tibbles
 library(gridExtra) #used to arrange plots with grid.arrange()
-library(corrplot) # used to make correllogram plot
+library(corrplot) # used to make correlogram plot
 
 ## Custom Functions
 ## Round numeric data explicitly turning off scientific notation
@@ -178,11 +178,11 @@ p2 <- df %>%
 grid.arrange(p1, p2, nrow=1)
 ```
 
-#### Correllogram
+#### Correlogram
 
-Based on the correllogram shown below there is little correlation between the 6 numerical variables presented. All positive correlations are in blue, and all negative correlations are in red.
+Based on the correlogram shown below there is little correlation between the 6 numerical variables presented. All positive correlations are in blue, and all negative correlations are in red.
 
-```{r correllogram}
+```{r correlogram}
 # take numerical values from df only into new dataframe dfcor
 dfcor <- df %>%
   select(latitude,
@@ -194,7 +194,7 @@ dfcor <- df %>%
 # calculate the correlation of each column against all other columns
 df_correlations <- cor(dfcor) 
 
-# plot the correllogram with corrplot
+# plot the correlogram with corrplot
 corrplot(df_correlations, 
          type="upper", 
          method="color", # colour scale plot
@@ -207,7 +207,7 @@ corrplot(df_correlations,
 
 The violin plot below shows the distribution of price in log10 scale for each district in descending order of average price. Based on the plot, Eixample has the highest priced and Nou Barris has the lowest priced listings.
 
-```{r violin plot, fig.width=7, fig.height=6, warning=FALSE}
+```{r violin plot, fig.height=6, fig.width=7}
 # calculate the mean price for each district for plot ordering
 mean_price<-df%>%
   group_by(district) %>%
@@ -215,6 +215,7 @@ mean_price<-df%>%
   arrange(desc(mean)) # mean price in descending order
   
 q<-df%>%
+  filter(price != 0) %>% # remove price = 0
   mutate(district = factor(district, levels = unique(mean_price$district))) %>% #factor district by descending mean price
   ggplot(aes(district, price)) +
   geom_violin(stat = "ydensity") +
@@ -224,6 +225,10 @@ q<-df%>%
   ggtitle("Distribution of Price for Each Barcelona District") +
   theme_bw(15) +
   theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1)) # x axis labels angled to view text clearly
+
+df %>%
+  arrange(df$price) %>%
+filter(price != 0)
 
 ```
 

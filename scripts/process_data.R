@@ -71,8 +71,7 @@ rename_cols <- function(df){
 }
 
 #' Filter by Price
-#' This function renames columns with long names: neighbourhood_group, minimum_nights, number_of_reviews, calculated_host_listings_count
-#' to the respective name: district, min_stay, reviews, host_listings
+#' This function excludes price by placing an upper bound on listing price per night
 #' @param df specifies the name of the data frame that contains a column named `price`
 #' @examples
 #' price_filter(dataframe.name)

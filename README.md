@@ -45,3 +45,6 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
   
   # Clean data
   `Rscript scripts/process_data.r --path_raw=data/raw_listings.csv --path_clean=data/clean_listings.csv`
+  
+  # Exploratory data analysis
+  `Rscript exploratory_data_analysis.R --path_clean=data/clean_listings.csv --path_image=images`

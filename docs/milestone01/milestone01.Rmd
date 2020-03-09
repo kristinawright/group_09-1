@@ -209,14 +209,14 @@ The violin plot below shows the distribution of price in log10 scale for each di
 
 ```{r violin plot, fig.height=6, fig.width=7}
 # calculate the mean price for each district for plot ordering
-mean_price<-df%>%
+mean.price<-df%>%
   group_by(district) %>%
   summarize(mean = mean(price)) %>%
   arrange(desc(mean)) # mean price in descending order
   
-q<-df%>%
+df%>%
   filter(price != 0) %>% # remove price = 0
-  mutate(district = factor(district, levels = unique(mean_price$district))) %>% #factor district by descending mean price
+  mutate(district = factor(district, levels = unique(mean.price$district))) %>% #factor district by descending mean price
   ggplot(aes(district, price)) +
   geom_violin(stat = "ydensity") +
   scale_y_log10() +  # change to log10 scale since density of price is scewed
@@ -225,10 +225,6 @@ q<-df%>%
   ggtitle("Distribution of Price for Each Barcelona District") +
   theme_bw(15) +
   theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1)) # x axis labels angled to view text clearly
-
-df %>%
-  arrange(df$price) %>%
-filter(price != 0)
 
 ```
 

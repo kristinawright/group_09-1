@@ -13,6 +13,7 @@ Usage: exploratory_data_analysis.R --path_clean=<path_clean> --path_image=<path_
 ## Load Libraries ####
 library(tidyverse)
 library(corrplot) # used to make correlogram plot
+library(gridExtra) #used to arrange plots with grid.arrange()
 library(docopt)
 library(glue)
 
@@ -24,8 +25,12 @@ main <- function(path_clean, path_image){
   
   clean.dat <- load_clean(path_clean)
   
-  density_plot(clean.dat)   
-  ggsave('density_plot.png', width = 8, height = 5, path = path_image)
+  png(glue(path_image, "/density_plot.png"), width = 8, height = 5, units = "in", res = 200)
+  p1<-density_plota(clean.dat)   
+  p2<-density_plotb(clean.dat)   
+  grid.arrange(p1, p2, nrow=1)
+  dev.off()
+#  ggsave('density_plot.png', width = 8, height = 5, path = path_image)
   
   
   png(glue(path_image, "/correlogram.png"), width = 5, height = 5, units = "in", res = 200)
@@ -45,7 +50,7 @@ main <- function(path_clean, path_image){
 #' This function loads in the clean/processed data
 #' @param path_clean is the full path name to the clean data file
 #' @examples
-#' load_clean(https://raw.githubusercontent.com/kristinawright/group_09-1/origin/branchybranch/data/clean_listings.csv)
+#' load_clean(https://raw.githubusercontent.com/STAT547-UBC-2019-20/group_09/master/data/clean_listings.csv)
 load_clean <- function(path_clean) {
   #Use col_types=cols() to suppress output of column type guessing
   read_csv(file=path_clean, 
@@ -53,18 +58,37 @@ load_clean <- function(path_clean) {
 }
 
 
-#' Density plot
+#' Density plot a)
 #' This function creates price density plot (density vs. listing price per night) for listings 
 #' @param df specifies the name of the data frame which should correspond to the clean data
 #' @examples
-#' density_plot(clean.dat)
-density_plot <- function(df){
+#' density_plota(clean.dat)
+density_plota <- function(df){
   df %>% 
     ggplot(aes(x=price)) + 
     geom_density() +
     theme_bw(14) +
-    theme(plot.title = element_text(size = 12)) +
-    ggtitle(label="(a) Price Density for Listings") +
+    theme(plot.title = element_text(size = 11)) +
+    ggtitle(label="(a) Price Density for All Listings") +
+    scale_x_continuous("Listing Price per Night", labels=scales::dollar_format(suffix="\u20AC", prefix='')) +
+    ylab("Density")
+}
+
+#' Density plot b)
+#' This function creates price density plot (density vs. listing price per night) for listings 
+#' @param df specifies the name of the data frame which should correspond to the clean data
+#' @examples
+#' density_plotb(clean.dat)
+density_plotb <- function(df){
+  p.lvl <- 0.975 #probability level
+  qtile <- quantile(df$price, probs=p.lvl) #quantile at designated probability level
+  df %>% 
+    filter(price <= quantile(df$price, probs=0.975)) %>% 
+    ggplot(aes(x=price)) + 
+    geom_density() +
+    theme_bw(14) +
+    theme(plot.title = element_text(size = 11)) +
+    ggtitle(label=paste("(b) Price Density of Listings under", qtile, "Euros")) +
     scale_x_continuous("Listing Price per Night", labels=scales::dollar_format(suffix="\u20AC", prefix='')) +
     ylab("Density")
 }

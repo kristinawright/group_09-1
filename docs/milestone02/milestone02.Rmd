@@ -1,7 +1,7 @@
 ---
-title: "Milestone 01 - Group 09"
+title: "Milestone 02 - Group 09"
 author: "Daniel Hadley, Kristina Wright"
-date: "February 29, 2020"
+date: "March 7, 2020"
 always_allow_html: true
 output: 
   html_document: 
@@ -86,19 +86,31 @@ As a result, we exclude the top listings. **
 A kernel density plot is presented for listing prices.
 An interesting observation from the price density for listings under ** Euros is the tendency for people to price their listings in increments of 50 Euros. For example, the Density Plot, we see multi-modes, where each mode after the largest mode occurs at every 50 Euro increment along the x-axis
 
-![](images/milestone02/density_plot.png)
+<center>
+
+![](../../images/milestone02/density_plot.png){width=650px}
+
+</center>
 
 #### Correlogram
 
 Based on the correlogram shown below there is little correlation between the 6 numerical variables presented. All positive correlations are in blue, and all negative correlations are in red.
 
-![](images/milestone02/correlogram.png)
+<center>
+
+![](../../images/milestone02/correlogram.png){width=500px}
+
+</center>
 
 #### Violin Plot
 
-The violin plot below shows the distribution of price in log10 scale for each district in descending order of average price. Based on the plot, Eixample has the highest priced and Nou Barris has the lowest priced listings.
+The violin plot below shows the distribution of price in log10 scale for each district in descending order of average price. Based on the plot, Example has the highest priced and Nou Barris has the lowest priced listings.
 
-![](images/milestone02/violin_plot.png)
+<center>
+
+![](../../images/milestone02/violin_plot.png){width=750px}
+
+</center>
 
 ### Research Question
 

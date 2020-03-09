@@ -14,9 +14,9 @@ Usage: clean_data.R --path_raw=<path_raw> --path_clean=<path_clean>
 
 ## Load Libraries ####
 ## Suppress messages from loading of libraries
-suppressPackageStartupMessages(library(tidyverse)) # "shut up, tidyverse"
+suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(glue))
-library(docopt)
+suppressPackageStartupMessages(library(docopt))
 
 opt <- docopt(doc) #The usage character is put into the docopt function which allows positional arguments in the script
 
@@ -24,8 +24,8 @@ opt <- docopt(doc) #The usage character is put into the docopt function which al
 main <- function(path_raw, path_clean){
   clean.dat <- load_data(path_raw) %>% 
     remove_cols() %>% 
-    rename_cols() %>% 
-    price_filter()
+    rename_cols() 
+    #price_filter() #Do not actually perform filtering for cleaned data (add after milestone02)
   
   save_data_as(clean.dat, path_clean)
   print(glue("The raw data {path_raw} has been successfully cleaned and saved as {path_clean}!"))

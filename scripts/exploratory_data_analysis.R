@@ -19,7 +19,7 @@ library(glue)
 opt <- docopt(doc) # This is where the "Usage" gets converted into code that allows you to use commandline arguments
 
 ## Main Function Call ####
-# saves images  ADD DEFAULT PATH_CLEAN
+# saves plot images  
 main <- function(path_clean, path_image){
   
   clean.dat <- load_clean(path_clean)

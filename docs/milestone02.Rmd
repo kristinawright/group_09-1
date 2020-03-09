@@ -86,7 +86,7 @@ As a result, we exclude the top listings. **
 A kernel density plot is presented for listing prices.
 An interesting observation from the price density for listings under ** Euros is the tendency for people to price their listings in increments of 50 Euros. For example, the Density Plot, we see multi-modes, where each mode after the largest mode occurs at every 50 Euro increment along the x-axis
 
-![](https://github.com/kristinawright/group_09-1/raw/origin/branchybranch/images/milestone02/density_plot.png)
+![](images/milestone02/density_plot.png)
 
 #### Correlogram
 

@@ -5,7 +5,7 @@
 a correllogram (longitude, price, minimum stay, review number, host listings number),
 and a violin plot (price vs. district) for exploratory data analysis and saves them as 
 seperate png files from cleaned data. This script takes in clean data CSV file path and 
-image path where plots will be exported as the variable arguments.
+image directory path where plots will be exported as the variable arguments.
 
 Usage: exploratory_data_analysis.R --path_clean=<path_clean> --path_image=<path_image>
   " -> doc

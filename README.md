@@ -43,14 +43,14 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
     a) **Load data**
     `Rscript scripts/load.R --data_url=https://raw.githubusercontent.com/STAT547-UBC-2019-20/data_sets/master/listings-Barcelona.csv`
   
-    a) **Clean data**
+    b) **Clean data**
     `Rscript scripts/process.R --path_raw=data/raw_listings.csv --path_clean=data/clean_listings.csv`
   
-    a) **Exploratory data analysis**
+    c) **Exploratory data analysis**
     `Rscript scripts/EDA.R --path_clean=data/clean_listings.csv --path_image=images/`
     
-    a) **Linear Regression**
+    d) **Linear Regression**
     `Rscript scripts/lm.R --path_data=data/clean_listings.csv`
   
-    a) **Knit final report**
+    e) **Knit final report**
     `Rscript scripts/knit.R --final_report="docs/final_report.Rmd"`

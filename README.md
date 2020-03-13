@@ -47,7 +47,7 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
     `Rscript scripts/process.R --path_raw=data/raw_listings.csv --path_clean=data/clean_listings.csv`
   
     (c) **Exploratory data analysis**
-    `Rscript scripts/EDA.R --path_clean=data/clean_listings.csv --path_image=images/milestone02`
+    `Rscript scripts/EDA.R --path_clean=data/clean_listings.csv --path_image=images/`
   
     (d) **Knit final report**
     `Rscript scripts/knit.R --final_report="docs/final_report.Rmd"`

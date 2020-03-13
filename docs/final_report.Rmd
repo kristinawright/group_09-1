@@ -76,15 +76,17 @@ Some of the column names are a little long, so we perform the following renaming
   - `calculated_host_listings_count` is renamed to `host_listings`
   
 
-#### Filter by Price 
+#### Filter Data
 
-We see that a few outliers extremely skews the density of all listings far to the right. 
+A few extreme outliers skew the density of the price of listings to the right.
 As a result, we exclude the top 2.5\% of listings.
+Then, we exclude listings with a minimum stay over 5 nights.
+This should help to limit listings that are catered to tourists by eliminating listings that are better classified as short-term rentals.
 
 #### Price Density
 
 A kernel density plot is presented for listing prices.
-An interesting observation from the price density for listings under ** Euros is the tendency for people to price their listings in increments of 50 Euros. For example, the Density Plot, we see multi-modes, where each mode after the largest mode occurs at every 50 Euro increment along the x-axis
+An interesting observation from the price density is the tendency for people to price their listings in increments of 50 Euros. For example, the Density Plot, we see multi-modes, where each mode after the largest mode occurs at every 50 Euro increment along the x-axis
 
 <center>
 

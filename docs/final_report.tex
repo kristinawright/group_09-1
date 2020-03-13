@@ -327,22 +327,25 @@ renamings:
   \texttt{host\_listings}
 \end{itemize}
 
-\hypertarget{filter-by-price}{%
-\paragraph{Filter by Price}\label{filter-by-price}}
+\hypertarget{filter-data}{%
+\paragraph{Filter Data}\label{filter-data}}
 
-We see that a few outliers extremely skews the density of all listings
-far to the right. As a result, we exclude the top 2.5\% of listings.
+A few extreme outliers skew the density of the price of listings to the
+right. As a result, we exclude the top 2.5\% of listings. Then, we
+exclude listings with a minimum stay over 5 nights. This should help to
+limit listings that are catered to tourists by eliminating listings that
+are better classified as short-term rentals.
 
 \hypertarget{price-density}{%
 \paragraph{Price Density}\label{price-density}}
 
 A kernel density plot is presented for listing prices. An interesting
-observation from the price density for listings under ** Euros is the
-tendency for people to price their listings in increments of 50 Euros.
-For example, the Density Plot, we see multi-modes, where each mode after
-the largest mode occurs at every 50 Euro increment along the x-axis
+observation from the price density is the tendency for people to price
+their listings in increments of 50 Euros. For example, the Density Plot,
+we see multi-modes, where each mode after the largest mode occurs at
+every 50 Euro increment along the x-axis
 
-\includegraphics[width=6.77083in,height=\textheight]{../images/milestone02/density_plot.png}
+\includegraphics[width=6.77083in,height=\textheight]{../images/density_plot.png}
 
 \hypertarget{correlogram}{%
 \paragraph{Correlogram}\label{correlogram}}
@@ -351,7 +354,7 @@ Based on the correlogram shown below there is little correlation between
 the 6 numerical variables presented. All positive correlations are in
 blue, and all negative correlations are in red.
 
-\includegraphics[width=5.20833in,height=\textheight]{../images/milestone02/correlogram.png}
+\includegraphics[width=5.20833in,height=\textheight]{../images/correlogram.png}
 
 \hypertarget{violin-plot}{%
 \paragraph{Violin Plot}\label{violin-plot}}
@@ -361,7 +364,7 @@ each district in descending order of average price. Based on the plot,
 Example has the highest priced and Nou Barris has the lowest priced
 listings.
 
-\includegraphics[width=7.8125in,height=\textheight]{../images/milestone02/violin_plot.png}
+\includegraphics[width=7.8125in,height=\textheight]{../images/violin_plot.png}
 
 \hypertarget{research-question}{%
 \subsubsection{Research Question}\label{research-question}}

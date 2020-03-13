@@ -90,7 +90,7 @@ An interesting observation from the price density is the tendency for people to 
 
 <center>
 
-![](../images/milestone02/density_plot.png){width=650px}
+![](../images/density_plot.png){width=650px}
 
 </center>
 
@@ -100,7 +100,7 @@ Based on the correlogram shown below there is little correlation between the 6 n
 
 <center>
 
-![](../images/milestone02/correlogram.png){width=500px}
+![](../images/correlogram.png){width=500px}
 
 </center>
 
@@ -110,7 +110,7 @@ The violin plot below shows the distribution of price in log10 scale for each di
 
 <center>
 
-![](../images/milestone02/violin_plot.png){width=750px}
+![](../images/violin_plot.png){width=750px}
 
 </center>
 

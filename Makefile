@@ -30,3 +30,5 @@ clean :
 	rm -f data/*
 	rm -f images/*
 	rm -f docs/*.tex
+	rm -f docs/*.html
+	rm -f docs/*.pdf

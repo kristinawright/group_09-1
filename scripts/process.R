@@ -2,15 +2,16 @@
 # date: 2020-03-06
 
 ## Documentation of Script
-"This script loads the raw CSV file, cleans the data by removing unwanted columns, 
-renaming columns with long names, limits price per night to the 97.5% quantile, 
-and then saves the cleaned data as a new CSV file. 
+"This script loads the raw CSV file as specified by the argument <path_raw>. 
+The raw data is cleaned by removing unwanted columns and renaming columns with long names.
+The observations are then limited by price per night to the 97.5% quantile and minimum stays of 5 or less nights.
+Finally, a column calculating distance from the most desirable areas of Barcelona is added to each listing.
+The prcessed data is saved as a new CSV file specified by the argument <path_clean>.
 The scripts one argument for the path to the raw data <path_raw> 
 and the path to where we save the clean data <path_clean>. 
 This script loads the R libraries: tidyverse, docopt.
 
-Usage: clean_data.R --path_raw=<path_raw> --path_clean=<path_clean>
-" -> doc
+Usage: clean_data.R --path_raw=<path_raw> --path_clean=<path_clean>" -> doc
 
 ## Load Libraries ####
 ## Suppress messages from loading of libraries
@@ -24,8 +25,10 @@ opt <- docopt(doc) #The usage character is put into the docopt function which al
 main <- function(path_raw, path_clean){
   clean.dat <- load_data(path_raw) %>% 
     remove_cols() %>% 
-    rename_cols() 
-    #price_filter() #Do not actually perform filtering for cleaned data (add after milestone02)
+    rename_cols() %>% 
+    price_filter() %>% 
+    stay_filter() %>% 
+    distance_col()
   
   save_data_as(clean.dat, path_clean)
   print(glue("The raw data {path_raw} has been successfully cleaned and saved as {path_clean}!"))
@@ -78,6 +81,26 @@ rename_cols <- function(df){
 price_filter <- function(df) {
   df %>% 
     filter(price <= quantile(df$price, probs=0.975))
+}
+
+#' Filter by Minimum Stay
+#' This function excludes listings with long minimum stays to gear our analysis to tourist accommodations
+#' @param df specifies the name of the data frame that contains a column named `min_stay`
+#' @examples
+#' stay_filter(dataframe.name)
+stay_filter <- function(df) {
+  df %>% 
+    filter(min_stay <= 5)
+}
+
+#' Add column for distance from city centre
+#' This function calculates Euclidean distance from latitude:41.383772 and longitude:2.182131
+#' @param df specifies the name of the data frame that contains the four columns to be renamed
+#' @examples
+#' rename_cols(raw.dat)
+distance_col <- function(df){
+  df %>% 
+    mutate(distance = sqrt((latitude - 41.383772)^2 + (longitude - 2.182131)^2))
 }
 
 #' Save cleaned data

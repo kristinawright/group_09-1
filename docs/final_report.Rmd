@@ -79,7 +79,7 @@ Some of the column names are a little long, so we perform the following renaming
 #### Filter by Price 
 
 We see that a few outliers extremely skews the density of all listings far to the right. 
-As a result, we exclude the top listings. **
+As a result, we exclude the top 2.5\% of listings.
 
 #### Price Density
 

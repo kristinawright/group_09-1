@@ -17,6 +17,7 @@ editor_options:
 library(knitr)
 library(tidyverse)
 library(DT) #In order to use the datatable() function for viewing tibbles
+library(broom) #To view linear model results in a tidy fashion
 
 ```
 
@@ -116,7 +117,22 @@ The violin plot below shows the distribution of price in log10 scale for each di
 
 ### Research Question
 
-In this analysis, we determine which factors, such as listing neighbourhood, type of room, distance from city center, etc. are significantly related to the price of a listing.
+We are interested in the linear relationship between an Airbnb listing's district, type of room, reviews left per month, and distance from city center to the listing's price. The results of the linear model are presented below.
+
+```{r lm-results}
+lm.1 <- readRDS(file=here::here("data", "lm_results"))
+tidy(lm.1)
+augment(lm.1)
+glance(lm.1)
+```
+
+The QQ-plot is presented to assess whether the assumption of normally distributed residuals is reasonable. We can see that the residuals have an extremely heavy upper tail and a light lower tail. This plot shows pretty convincing evidence that the normality assumption is not appropriate. For a better model, perhaps we should try transformations of the variables such as a log transformation of price.
+
+<center>
+
+![](../images/QQ_plot.png){width=750px}
+
+</center>
 
 ### Plan of Action 
 

@@ -37,6 +37,7 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
     - `corrplot`
     - `glue`
     - `scales`
+    - `broom`
   
 1. Run the following scripts (in order) with the specified arguments:
 

@@ -19,7 +19,8 @@ main <- function(final_report) {
                      c("html_document", "pdf_document"))
   
   # Print success message
-  print(glue("The final report has been successfully rendered as {final_report}.html and {final_report}.pdf!"))
+  file.name <- str_sub(final_report, 1, str_length(final_report)-3)
+  print(glue("The final report has been successfully rendered as {file.name}html and {file.name}pdf!"))
 }
 
 ## Tests ####

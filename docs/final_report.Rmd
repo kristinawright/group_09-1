@@ -61,7 +61,7 @@ The data used in this analysis was compiled on November 9, 2019 and includes 20,
 
 #### Remove Unwanted Data
 
-In this section, we remove columns from the dataset that should have no fundamental influence on listing price. This includes the short title of th listing (`name`), the name of the host(s) (`host_name`), and the availability of the listing over the next 365 days (`availability_365`). While there might end up being a relation between availability and price, since cheap listings for a desirable neighbourhood are likely to be booked, this relationship is backwards; we want to find factors that affect the listing price, not factors affected by the listing price. 
+In this section, we remove columns from the dataset that should have no fundamental influence on listing price. This includes the short title of the listing (`name`), the name of the host(s) (`host_name`), and the availability of the listing over the next 365 days (`availability_365`). While there might end up being a relation between availability and price, since cheap listings for a desirable neighbourhood are likely to be booked, this relationship is backwards; we want to find factors that affect the listing price, not factors affected by the listing price. 
 
 
 #### Rename Columns
@@ -111,11 +111,15 @@ The violin plot below shows the distribution of price in log10 scale for each di
 
 <center>
 
-![](../images/violin_plot.png){width=750px}
+![](../images/violin_plot.png){width=675px}
 
 </center>
 
-### Research Question
+### Methods
+
+We performed linear regression on Airbnb listing's of price to district, type of room, reviews left per month, and distance from city center to see how these variables my be affecting the Airbnb listing prices in Barcelona.  A QQ-plot was created to assess the linear model probability residuals distributions to a normal distribution.
+
+### Results
 
 We are interested in the linear relationship between an Airbnb listing's district, type of room, reviews left per month, and distance from city center to the listing's price. The results of the linear model are presented below.
 
@@ -130,19 +134,15 @@ The QQ-plot is presented to assess whether the assumption of normally distribute
 
 <center>
 
-![](../images/QQ_plot.png){width=750px}
+![](../images/QQ_plot.png){width=675px}
 
 </center>
 
-### Plan of Action 
-
-With our research question, the first goal is to determine which factors are most important to explaining list price and perform a linear regression analysis. This may require some data transformation, handling or removal of outliers, and removing incomplete observations.
-
-### Methods
-
-### Results
 
 ### Discussion 
+
+In determining the linear relationship between an Airbnb listing's district, type of room, reviews left per month, and distance from city center to the listing's price, the model made has an assumption of normal distribution.  However, Based on the QQ-plot, the residuals do not follow the linear trend and, therefore, the assumtion of a normal distribution does not hold. 
+
 
 ### References
 

@@ -1,7 +1,7 @@
 ---
-title: "Milestone 02 - Group 09"
+title: "Milestone 03 - Group 09"
 author: "Daniel Hadley, Kristina Wright"
-date: "March 7, 2020"
+date: "March 14, 2020"
 always_allow_html: true
 output: 
   html_document: 
@@ -17,6 +17,7 @@ editor_options:
 library(knitr)
 library(tidyverse)
 library(DT) #In order to use the datatable() function for viewing tibbles
+library(broom) #To view linear model results in a tidy fashion
 
 ```
 
@@ -60,7 +61,7 @@ The data used in this analysis was compiled on November 9, 2019 and includes 20,
 
 #### Remove Unwanted Data
 
-In this section, we remove columns from the dataset that should have no fundamental influence on listing price. This includes the short title of th listing (`name`), the name of the host(s) (`host_name`), and the availability of the listing over the next 365 days (`availability_365`). While there might end up being a relation between availability and price, since cheap listings for a desirable neighbourhood are likely to be booked, this relationship is backwards; we want to find factors that affect the listing price, not factors affected by the listing price. 
+In this section, we remove columns from the dataset that should have no fundamental influence on listing price. This includes the short title of the listing (`name`), the name of the host(s) (`host_name`), and the availability of the listing over the next 365 days (`availability_365`). While there might end up being a relation between availability and price, since cheap listings for a desirable neighbourhood are likely to be booked, this relationship is backwards; we want to find factors that affect the listing price, not factors affected by the listing price. 
 
 
 #### Rename Columns
@@ -76,19 +77,21 @@ Some of the column names are a little long, so we perform the following renaming
   - `calculated_host_listings_count` is renamed to `host_listings`
   
 
-#### Filter by Price 
+#### Filter Data
 
-We see that a few outliers extremely skews the density of all listings far to the right. 
-As a result, we exclude the top listings. **
+A few extreme outliers skew the density of the price of listings to the right.
+As a result, we exclude the top 2.5\% of listings.
+Then, we exclude listings with a minimum stay over 5 nights.
+This should help to limit listings that are catered to tourists by eliminating listings that are better classified as short-term rentals.
 
 #### Price Density
 
 A kernel density plot is presented for listing prices.
-An interesting observation from the price density for listings under ** Euros is the tendency for people to price their listings in increments of 50 Euros. For example, the Density Plot, we see multi-modes, where each mode after the largest mode occurs at every 50 Euro increment along the x-axis
+An interesting observation from the price density is the tendency for people to price their listings in increments of 50 Euros. For example, the Density Plot, we see multi-modes, where each mode after the largest mode occurs at every 50 Euro increment along the x-axis
 
 <center>
 
-![](../../images/milestone02/density_plot.png){width=650px}
+![](../images/density_plot.png){width=650px}
 
 </center>
 
@@ -98,7 +101,7 @@ Based on the correlogram shown below there is little correlation between the 6 n
 
 <center>
 
-![](../../images/milestone02/correlogram.png){width=500px}
+![](../images/correlogram.png){width=500px}
 
 </center>
 
@@ -108,23 +111,38 @@ The violin plot below shows the distribution of price in log10 scale for each di
 
 <center>
 
-![](../../images/milestone02/violin_plot.png){width=750px}
+![](../images/violin_plot.png){width=675px}
 
 </center>
 
-### Research Question
-
-In this analysis, we determine which factors, such as listing neighbourhood, type of room, distance from city center, etc. are significantly related to the price of a listing.
-
-### Plan of Action 
-
-With our research question, the first goal is to determine which factors are most important to explaining list price and perform a linear regression analysis. This may require some data transformation, handling or removal of outliers, and removing incomplete observations.
-
 ### Methods
+
+We performed linear regression on Airbnb listing's of price to district, type of room, reviews left per month, and distance from city center to see how these variables my be affecting the Airbnb listing prices in Barcelona.  A QQ-plot was created to assess the linear model probability residuals distributions to a normal distribution.
 
 ### Results
 
+We are interested in the linear relationship between an Airbnb listing's district, type of room, reviews left per month, and distance from city center to the listing's price. The results of the linear model are presented below.
+
+```{r lm-results}
+lm.1 <- readRDS(file=here::here("data", "lm_results"))
+tidy(lm.1)
+augment(lm.1)
+glance(lm.1)
+```
+
+The QQ-plot is presented to assess whether the assumption of normally distributed residuals is reasonable. We can see that the residuals have an extremely heavy upper tail and a light lower tail. This plot shows pretty convincing evidence that the normality assumption is not appropriate. For a better model, perhaps we should try transformations of the variables such as a log transformation of price.
+
+<center>
+
+![](../images/QQ_plot.png){width=675px}
+
+</center>
+
+
 ### Discussion 
+
+In determining the linear relationship between an Airbnb listing's district, type of room, reviews left per month, and distance from city center to the listing's price, the model made has an assumption of normal distribution.  However, Based on the QQ-plot, the residuals do not follow the linear trend and, therefore, the assumtion of a normal distribution does not hold. 
+
 
 ### References
 

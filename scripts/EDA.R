@@ -1,5 +1,7 @@
 # author: Kristina Wright
 # date: 2020-03-06
+# edited by: Daniel Hadley
+# edit date: 2020-03-13
 
 "This script creates price density plots (density vs. listing price per night), 
 a correllogram (longitude, price, minimum stay, review number, host listings number),
@@ -7,15 +9,14 @@ and a violin plot (price vs. district) for exploratory data analysis and saves t
 seperate png files from cleaned data. This script takes in clean data CSV file path and 
 image directory path where plots will be exported as the variable arguments.
 
-Usage: exploratory_data_analysis.R --path_clean=<path_clean> --path_image=<path_image>
-  " -> doc
+Usage: exploratory_data_analysis.R --path_clean=<path_clean> --path_image=<path_image>" -> doc
 
 ## Load Libraries ####
-library(tidyverse)
-library(corrplot) # used to make correlogram plot
-library(gridExtra) #used to arrange plots with grid.arrange()
-library(docopt)
-library(glue)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(corrplot)) # used to make correlogram plot
+suppressPackageStartupMessages(library(gridExtra)) #used to arrange plots with grid.arrange()
+suppressPackageStartupMessages(library(docopt))
+suppressPackageStartupMessages(library(glue))
 
 opt <- docopt(doc) # This is where the "Usage" gets converted into code that allows you to use commandline arguments
 
@@ -25,12 +26,8 @@ main <- function(path_clean, path_image){
   
   clean.dat <- load_clean(path_clean)
   
-  png(glue(path_image, "/density_plot.png"), width = 8, height = 5, units = "in", res = 200)
-  p1<-density_plota(clean.dat)   
-  p2<-density_plotb(clean.dat)   
-  grid.arrange(p1, p2, nrow=1)
-  dev.off()
-#  ggsave('density_plot.png', width = 8, height = 5, path = path_image)
+  density_plot(clean.dat)   
+  ggsave('density_plot.png', width = 8, height = 5, path = path_image)
   
   
   png(glue(path_image, "/correlogram.png"), width = 5, height = 5, units = "in", res = 200)
@@ -58,37 +55,18 @@ load_clean <- function(path_clean) {
 }
 
 
-#' Density plot a)
+#' Density plot
 #' This function creates price density plot (density vs. listing price per night) for listings 
 #' @param df specifies the name of the data frame which should correspond to the clean data
 #' @examples
 #' density_plota(clean.dat)
-density_plota <- function(df){
+density_plot <- function(df) {
   df %>% 
     ggplot(aes(x=price)) + 
     geom_density() +
     theme_bw(14) +
     theme(plot.title = element_text(size = 11)) +
-    ggtitle(label="(a) Price Density for All Listings") +
-    scale_x_continuous("Listing Price per Night", labels=scales::dollar_format(suffix="\u20AC", prefix='')) +
-    ylab("Density")
-}
-
-#' Density plot b)
-#' This function creates price density plot (density vs. listing price per night) for listings 
-#' @param df specifies the name of the data frame which should correspond to the clean data
-#' @examples
-#' density_plotb(clean.dat)
-density_plotb <- function(df){
-  p.lvl <- 0.975 #probability level
-  qtile <- quantile(df$price, probs=p.lvl) #quantile at designated probability level
-  df %>% 
-    filter(price <= quantile(df$price, probs=0.975)) %>% 
-    ggplot(aes(x=price)) + 
-    geom_density() +
-    theme_bw(14) +
-    theme(plot.title = element_text(size = 11)) +
-    ggtitle(label=paste("(b) Price Density of Listings under", qtile, "Euros")) +
+    ggtitle(label="Price Density for All Listings") +
     scale_x_continuous("Listing Price per Night", labels=scales::dollar_format(suffix="\u20AC", prefix='')) +
     ylab("Density")
 }
@@ -111,7 +89,9 @@ correlogram <- function(df){
              method="color", # colour scale plot
              tl.srt=45, #text angled for better viewing
              addCoef.col = "black", # Add correlation coefficient
-             diag = FALSE)
+             diag = FALSE,
+             title="Correlation of Some Columns",
+             mar=c(0,0,1,0)) # Correctly positions Title of Correlogram
 }
 
 

@@ -404,10 +404,19 @@ each district in descending order of average price. Based on the plot,
 Example has the highest priced and Nou Barris has the lowest priced
 listings.
 
-\includegraphics[width=7.29167in,height=\textheight]{../images/violin_plot.png}
+\includegraphics[width=7.03125in,height=\textheight]{../images/violin_plot.png}
 
-\hypertarget{research-question}{%
-\subsubsection{Research Question}\label{research-question}}
+\hypertarget{methods}{%
+\subsubsection{Methods}\label{methods}}
+
+We performed linear regression on Airbnb listing's of price to district,
+type of room, reviews left per month, and distance from city center to
+see how these variables my be affecting the Airbnb listing prices in
+Barcelona. A QQ-plot was created to assess the linear model probability
+residuals distributions to a normal distribution.
+
+\hypertarget{results}{%
+\subsubsection{Results}\label{results}}
 
 We are interested in the linear relationship between an Airbnb listing's
 district, type of room, reviews left per month, and distance from city
@@ -487,24 +496,17 @@ pretty convincing evidence that the normality assumption is not
 appropriate. For a better model, perhaps we should try transformations
 of the variables such as a log transformation of price.
 
-\includegraphics[width=7.29167in,height=\textheight]{../images/QQ_plot.png}
-
-\hypertarget{plan-of-action}{%
-\subsubsection{Plan of Action}\label{plan-of-action}}
-
-With our research question, the first goal is to determine which factors
-are most important to explaining list price and perform a linear
-regression analysis. This may require some data transformation, handling
-or removal of outliers, and removing incomplete observations.
-
-\hypertarget{methods}{%
-\subsubsection{Methods}\label{methods}}
-
-\hypertarget{results}{%
-\subsubsection{Results}\label{results}}
+\includegraphics[width=7.03125in,height=\textheight]{../images/QQ_plot.png}
 
 \hypertarget{discussion}{%
 \subsubsection{Discussion}\label{discussion}}
+
+In determining the linear relationship between an Airbnb listing's
+district, type of room, reviews left per month, and distance from city
+center to the listing's price, the model made has an assumption of
+normal distribution. However, Based on the QQ-plot, the residuals do not
+follow the linear trend and, therefore, the assumtion of a normal
+distribution does not hold.
 
 \hypertarget{references}{%
 \subsubsection{References}\label{references}}

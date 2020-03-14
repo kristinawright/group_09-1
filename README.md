@@ -59,7 +59,7 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
 1. Option 2: Run make in terminal to run all individual scripts above:
 
     a) **Dependency**
-    ensure `make` is installed
+    Ensure `make` is installed
     
     b) **Run all scripts**
     `make all`

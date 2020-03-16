@@ -406,27 +406,43 @@ listings.
 
 \includegraphics[width=7.03125in,height=\textheight]{../images/violin_plot.png}
 
-\hypertarget{methods}{%
-\subsubsection{Methods}\label{methods}}
+\hypertarget{analysis-methods}{%
+\subsubsection{Analysis Methods}\label{analysis-methods}}
 
-We performed linear regression on Airbnb listing's of price to district,
-type of room, reviews left per month, and distance from city center to
-see how these variables my be affecting the Airbnb listing prices in
-Barcelona. A QQ-plot was created to assess the linear model probability
-residuals distributions to a normal distribution.
-
-\hypertarget{results}{%
-\subsubsection{Results}\label{results}}
-
-We are interested in the linear relationship between an Airbnb listing's
+We perform linear regression on Airbnb listing prices to the listing's
 district, type of room, reviews left per month, and distance from city
-center to the listing's price. The results of the linear model are
-presented below.
+center to see how these variables might be affecting the Airbnb listing
+prices in Barcelona. First, we run
+
+\texttt{lm(price\ \textasciitilde{}\ district\ +\ room\_type\ +\ distance\ +\ reviews\_per\_month,\ data=df)}
+
+where our data is housed in the dataframe, \texttt{df} and look at the
+QQ-Plots of the standardized residuals. This plot is given as the left
+plot below. It is obvious that normality assumptions are not
+appropriate, so we then run
+
+\texttt{lm(log(price)\ \textasciitilde{}\ district\ +\ room\_type\ +\ distance\ +\ reviews\_per\_month,\ data=df)}
+
+and look at the QQ-plot for the log transform of price. This QQ-plot is
+given below on the right and is much closer to the normality assumption
+even though there is evidence of heavier tails.
+
+\includegraphics[width=4.6875in,height=\textheight]{../images/lm1-QQPlot.png}
+\includegraphics[width=4.6875in,height=\textheight]{../images/lm2-QQPlot.png}
+
+\hypertarget{analysis-results}{%
+\subsubsection{Analysis Results}\label{analysis-results}}
+
+First, let's look at the results of the linear regression for the
+untransformed price response variable. In the output below, we see that
+only 2 of the 10 districts, with Ciutat Vella as the base district, are
+statistically significant at the 95\% confidence level. These are
+Eixample and Sarrià-Sant Gervasi.
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{#Linear Model on Price}
 \NormalTok{lm}\FloatTok{.1}\NormalTok{ <-}\StringTok{ }\KeywordTok{readRDS}\NormalTok{(}\DataTypeTok{file=}\NormalTok{here}\OperatorTok{::}\KeywordTok{here}\NormalTok{(}\StringTok{"data"}\NormalTok{, }\StringTok{"lm1_results.rds"}\NormalTok{))}
-\NormalTok{lm}\FloatTok{.2}\NormalTok{ <-}\StringTok{ }\KeywordTok{readRDS}\NormalTok{(}\DataTypeTok{file=}\NormalTok{here}\OperatorTok{::}\KeywordTok{here}\NormalTok{(}\StringTok{"data"}\NormalTok{, }\StringTok{"lm2_results.rds"}\NormalTok{))}
 \KeywordTok{tidy}\NormalTok{(lm}\FloatTok{.1}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -452,8 +468,22 @@ presented below.
 ## 15 reviews_per_month             -3.13      0.320    -9.80  1.40e-22
 \end{verbatim}
 
+We can interpret the estimate for Eixample, 13.7, as saying that prices
+of Airbnb listings in the Eixample district differ from listings in the
+Ciutat Vella district, on average, by 13.7 Euro's per night. All room
+types, distance, and reviews per month are statistically significant at
+any reasonable confidence level.
+
+Next, we look at the results of the linear regression on the log(price)
+of Airbnb listings. In the output below, we see many more districts are
+now statistically significant, but the interpretation of their
+coefficient estimates are not as straightforward as the results when
+regressing on listing price.
+
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{#Linear Model on log(Price)}
+\NormalTok{lm}\FloatTok{.2}\NormalTok{ <-}\StringTok{ }\KeywordTok{readRDS}\NormalTok{(}\DataTypeTok{file=}\NormalTok{here}\OperatorTok{::}\KeywordTok{here}\NormalTok{(}\StringTok{"data"}\NormalTok{, }\StringTok{"lm2_results.rds"}\NormalTok{))}
 \KeywordTok{tidy}\NormalTok{(lm}\FloatTok{.2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -479,63 +509,60 @@ presented below.
 ## 15 reviews_per_month            -0.0214   0.00250    -8.57  1.18e- 17
 \end{verbatim}
 
+Due to the improved QQ-Plot for the log(price) model, we only consider
+this model's results going forward. We can look at how well this model
+fits the data by randomly selecting 10 listings and comparing the price
+to the fitted price.
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{augment}\NormalTok{(lm}\FloatTok{.1}\NormalTok{)}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{100}\NormalTok{)}
+\KeywordTok{augment}\NormalTok{(lm}\FloatTok{.2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{slice}\NormalTok{(}\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(}\KeywordTok{augment}\NormalTok{(lm}\FloatTok{.2}\NormalTok{)), }\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{FALSE}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(.rownames, district, room_type, distance, reviews_per_month, log.price., .fitted) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{price =}\NormalTok{ log.price.,}
+         \DataTypeTok{fitted =}\NormalTok{ .fitted) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{price =} \KeywordTok{exp}\NormalTok{(price),}
+         \DataTypeTok{fitted =} \KeywordTok{exp}\NormalTok{(fitted))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## # A tibble: 13,590 x 13
-##    .rownames price district room_type distance reviews_per_mon~ .fitted .se.fit
-##    <chr>     <dbl> <chr>    <chr>        <dbl>            <dbl>   <dbl>   <dbl>
-##  1 1           130 Sant Ma~ Entire h~  0.0253             0.02    146.     1.92
-##  2 2            60 Eixample Entire h~  0.0224             0.25    156.     1.25
-##  3 3           210 Sant Ma~ Entire h~  0.0482             0.48    133.     2.36
-##  4 4            32 Gràcia   Private ~  0.0312             2.38     40.2    2.01
-##  5 5            60 Gràcia   Entire h~  0.0343             1.71    131.     2.02
-##  6 6            70 Gràcia   Entire h~  0.0330             0.84    134.     2.03
-##  7 7           140 Gràcia   Entire h~  0.0244             0.580   139.     2.09
-##  8 8           100 Ciutat ~ Private ~  0.00820            0.07     59.6    1.51
-##  9 9           250 Ciutat ~ Entire h~  0.00708            1.28    146.     1.55
-## 10 10           40 Eixample Private ~  0.0301             2.97     53.5    1.25
-## # ... with 13,580 more rows, and 5 more variables: .resid <dbl>, .hat <dbl>,
-## #   .sigma <dbl>, .cooksd <dbl>, .std.resid <dbl>
+## # A tibble: 10 x 7
+##    .rownames district        room_type    distance reviews_per_mon~ price fitted
+##    <chr>     <chr>           <chr>           <dbl>            <dbl> <dbl>  <dbl>
+##  1 4036      Ciutat Vella    Entire home~   0.0123             0.02 135.   134. 
+##  2 514       Eixample        Entire home~   0.0135             0.56 149    142. 
+##  3 3623      Sarrià-Sant Ge~ Private room   0.0404             3.27  84.0   45.5
+##  4 3935      Ciutat Vella    Private room   0.0110             0.13  40     49.0
+##  5 4375      Sant Andreu     Entire home~   0.0331             1.16  60.0   95.9
+##  6 8530      Eixample        Private room   0.0297             0.27  50.0   46.9
+##  7 3190      Eixample        Entire home~   0.0226             0.12  85.   136. 
+##  8 12181     Sant Martí      Entire home~   0.0284             4.02 180    109. 
+##  9 8849      Eixample        Private room   0.0173             3.33  55.    47.5
+## 10 9365      Sants-Montjuïc  Entire home~   0.0218             0.47 120.   117.
 \end{verbatim}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{glance}\NormalTok{(lm}\FloatTok{.1}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+In the output above, the \texttt{price} columns shows the listing's
+price from the Airbnb website and \texttt{fitted} shows the price given
+by the linear model. Note that we exponentiated this output so that it
+is in Euro's and straightforward to compare.
 
-\begin{verbatim}
-## # A tibble: 1 x 11
-##   r.squared adj.r.squared sigma statistic p.value    df  logLik    AIC    BIC
-##       <dbl>         <dbl> <dbl>     <dbl>   <dbl> <int>   <dbl>  <dbl>  <dbl>
-## 1     0.360         0.359  65.3      545.       0    15 -76071. 1.52e5 1.52e5
-## # ... with 2 more variables: deviance <dbl>, df.residual <int>
-\end{verbatim}
-
-The QQ-plot is presented to assess whether the assumption of normally
-distributed residuals is reasonable. We can see that the residuals have
-an extremely heavy upper tail and a light lower tail. This plot shows
-pretty convincing evidence that the normality assumption is not
-appropriate. For a better model, perhaps we should try transformations
-of the variables such as a log transformation of price.
-
-\includegraphics[width=4.6875in,height=\textheight]{../images/lm1-QQPlot.png}
-\includegraphics[width=4.6875in,height=\textheight]{../images/lm2-QQPlot.png}
+Finally, we can look at the adjusted r-squared to see how much of the
+variance in listing price is explained by district, type of room,
+distance of city center, and reviews per month. By using the
+\texttt{glance()} function from the \texttt{broom} package, we see that
+52.36\% of the variance of the log transform of listing is explained by
+our model.
 
 \hypertarget{discussion}{%
 \subsubsection{Discussion}\label{discussion}}
 
-In determining the linear relationship between an Airbnb listing's
-district, type of room, reviews left per month, and distance from city
-center to the listing's price, the model made has an assumption of
-normal distribution. However, Based on the QQ-plot, the residuals do not
-follow the linear trend and, therefore, the assumtion of a normal
-distribution does not hold.
+Based on the results of our model using the log transform of listing
+price, district, type of room, distance from city center, and reviews
+per month all play a significant role in the price of an Airbnb listing.
+However, much of the variance is left unexplained in our model so that
+we may want to look for additional variables.
 
 \hypertarget{references}{%
 \subsubsection{References}\label{references}}

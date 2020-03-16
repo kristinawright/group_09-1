@@ -40,7 +40,7 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
     - `scales`
     - `broom`
   
-1. Option 1: Run the following scripts (in order) in terminal with the specified arguments:
+1. Option 1: Run the following scripts (in order) in terminal from the main repo directory with the specified arguments:
 
     a) **Load data**
     `Rscript scripts/load.R --data_url=https://raw.githubusercontent.com/STAT547-UBC-2019-20/data_sets/master/listings-Barcelona.csv`
@@ -57,13 +57,13 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
     e) **Knit final report**
     `Rscript scripts/knit.R --final_report="docs/final_report.Rmd"`
 
-1. Option 2: Run make in terminal to run all individual scripts above:
+1. Option 2: Run make in terminal from the main repo directory to run all individual scripts above:
 
     a) **Dependency**
     Ensure `make` is installed
     
-    b) **Run all scripts**
+    b) **Run all scripts and reproduce analysis**
     `make all`
     
-    c) **Delete all outputs from scripts**
+    c) **Delete all output from scripts**
     `make clean`

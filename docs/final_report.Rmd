@@ -124,8 +124,10 @@ We performed linear regression on Airbnb listing's of price to district, type of
 We are interested in the linear relationship between an Airbnb listing's district, type of room, reviews left per month, and distance from city center to the listing's price. The results of the linear model are presented below.
 
 ```{r lm-results}
-lm.1 <- readRDS(file=here::here("data", "lm_results"))
+lm.1 <- readRDS(file=here::here("data", "lm1_results.rds"))
+lm.2 <- readRDS(file=here::here("data", "lm2_results.rds"))
 tidy(lm.1)
+tidy(lm.2)
 augment(lm.1)
 glance(lm.1)
 ```
@@ -134,7 +136,7 @@ The QQ-plot is presented to assess whether the assumption of normally distribute
 
 <center>
 
-![](../images/QQ_plot.png){width=675px}
+![](../images/lm1-QQPlot.png){width=450px} ![](../images/lm2-QQPlot.png){width=450px}
 
 </center>
 

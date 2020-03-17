@@ -18,17 +18,18 @@ images/correlogram.png images/density_plot.png images/biolin_plot.png : scripts/
 	Rscript scripts/EDA.R --path_clean=data/clean_listings.csv --path_image=images/
 	
 # Linear Regression
-images/QQ_plot.png data/lm_results : scripts/lm.R data/clean_listings.csv
+images/lm1-QQPlot.png images/lm2-QQPlot.png data/lm1_results.rds data/lm2_results.rds : scripts/lm.R data/clean_listings.csv
 	Rscript scripts/lm.R --path_data=data/clean_listings.csv
 
 # Knit report
-docs/final_report.html docs/final_report.pdf : docs/final_report.Rmd images/correlogram.png images/density_plot.png images/biolin_plot.png images/QQ_plot.png
+docs/final_report.html docs/final_report.pdf : docs/final_report.Rmd images/correlogram.png images/density_plot.png images/violin_plot.png images/lm1-QQPlot.png images/lm2-QQPlot.png
 	Rscript scripts/knit.R --final_report="docs/final_report.Rmd"
 
 # clean/remove intermediate data
 clean : 
-	rm -f data/*
-	rm -f images/*
+	rm -f data/*.csv
+	rm -f data/*.rds
+	rm -f images/*.png
 	rm -f docs/*.tex
 	rm -f docs/*.html
 	rm -f docs/*.pdf

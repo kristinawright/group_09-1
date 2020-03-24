@@ -129,7 +129,7 @@ and look at the QQ-plot for the log transform of price. This QQ-plot is given be
 
 <center>
 
-![](../images/lm1-QQPlot.png){width=450px} ![](../images/lm2-QQPlot.png){width=450px}
+![](../images/lm1-QQPlot.png){width=325px} ![](../images/lm2-QQPlot.png){width=325px}
 
 </center>
 

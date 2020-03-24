@@ -65,7 +65,7 @@ density_plot <- function(df) {
     ggplot(aes(x=price)) + 
     geom_density() +
     theme_bw(14) +
-    theme(plot.title = element_text(size = 11)) +
+    theme(plot.title = element_text(size = 14)) +
     ggtitle(label="Price Density for All Listings") +
     scale_x_continuous("Listing Price per Night", labels=scales::dollar_format(suffix="\u20AC", prefix='')) +
     ylab("Density")
@@ -90,7 +90,7 @@ correlogram <- function(df){
              tl.srt=45, #text angled for better viewing
              addCoef.col = "black", # Add correlation coefficient
              diag = FALSE,
-             title="Correlation of Some Columns",
+             title="Correlation between Relevant Variables",
              mar=c(0,0,1,0)) # Correctly positions Title of Correlogram
 }
 
@@ -123,8 +123,9 @@ violin_plot <- function(df, mean.price){
   ylab("Price (€)") +
   xlab("District") +
   ggtitle("Distribution of Price for Each Barcelona District") +
-  theme_bw(15) +
-  theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1)) 
+  theme_bw(14) +
+  theme(plot.title = element_text(size = 14), 
+          axis.text.x = element_text(angle = 60, hjust = 1)) 
 }
 
 ### tests

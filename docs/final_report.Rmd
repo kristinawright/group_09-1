@@ -91,7 +91,7 @@ An interesting observation from the price density is the tendency for people to 
 
 <center>
 
-![](../images/density_plot.png){width=650px}
+![Density plot for prices of Airbnb listings in Barcelona, Spain: Listings have an extreme positive skew and appear to be multimodal. The modality reflects the tendency for listings to be priced in increments of 50 Euros](../images/density_plot.png){width=650px}
 
 </center>
 
@@ -101,7 +101,7 @@ Based on the correlogram shown below there is little correlation between the 6 n
 
 <center>
 
-![](../images/correlogram.png){width=500px}
+![Correlations for potentially significant variables in the explaining the price of Airbnb listings](../images/correlogram.png){width=500px}
 
 </center>
 
@@ -111,7 +111,7 @@ The violin plot below shows the distribution of price in log10 scale for each di
 
 <center>
 
-![](../images/violin_plot.png){width=675px}
+![Plot shows the distribution of listing prices for Airbnb listings in Barcelona, Spain by city district](../images/violin_plot.png){width=675px}
 
 </center>
 
@@ -129,7 +129,9 @@ and look at the QQ-plot for the log transform of price. This QQ-plot is given be
 
 <center>
 
-![](../images/lm1-QQPlot.png){width=325px} ![](../images/lm2-QQPlot.png){width=325px}
+![QQ-Plot for standardized residuals of the regression on the raw price data: The residuals show evidence that the errors are not normally distributed](../images/lm1-QQPlot.png){width=600px}
+
+![QQ-Plot for standardized residuals of the regression on the log transform of price data: The residuals seem to have heavier tails than the normal distribution, but are better suited for linear regression than the untransformed price data](../images/lm2-QQPlot.png){width=600px}
 
 </center>
 

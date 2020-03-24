@@ -21,6 +21,7 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
 | :--: | ---- | :--------------: |
 | [01](https://stat545.stat.ubc.ca/evaluation/milestone_01/milestone_01/) | February 29, 2020 | [milestone01](https://stat547-ubc-2019-20.github.io/group_09/docs/milestone01/milestone01.html) |
 | [02](https://stat545.stat.ubc.ca/evaluation/milestone_02/milestone_02/) | March 7, 2020 | [milestone02](https://stat547-ubc-2019-20.github.io/group_09/docs/milestone02/milestone02.html) |
+| [03](https://stat545.stat.ubc.ca/evaluation/milestone_03/milestone_03/) | March 14, 2020 | [html](https://stat547-ubc-2019-20.github.io/group_09/docs/final_report.html) and [pdf](https://stat547-ubc-2019-20.github.io/group_09/docs/final_report.pdf) |
 
 ## 3. Usage :computer:
 
@@ -39,7 +40,7 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
     - `scales`
     - `broom`
   
-1. Option 1: Run the following scripts (in order) in terminal with the specified arguments:
+1. Option 1: Run the following scripts (in order) in terminal from the main repo directory with the specified arguments:
 
     a) **Load data**
     `Rscript scripts/load.R --data_url=https://raw.githubusercontent.com/STAT547-UBC-2019-20/data_sets/master/listings-Barcelona.csv`
@@ -56,13 +57,13 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
     e) **Knit final report**
     `Rscript scripts/knit.R --final_report="docs/final_report.Rmd"`
 
-1. Option 2: Run make in terminal to run all individual scripts above:
+1. Option 2: Run make in terminal from the main repo directory to run all individual scripts above:
 
     a) **Dependency**
     Ensure `make` is installed
     
-    b) **Run all scripts**
+    b) **Run all scripts and reproduce analysis**
     `make all`
     
-    c) **Delete all outputs from scripts**
+    c) **Delete all output from scripts**
     `make clean`

@@ -91,7 +91,7 @@ An interesting observation from the price density is the tendency for people to 
 
 <center>
 
-![](../images/density_plot.png){width=650px}
+![Density plot for prices of Airbnb listings in Barcelona, Spain: Listings have an extreme positive skew and appear to be multimodal. The modality reflects the tendency for listings to be priced in increments of 50 Euros](../images/density_plot.png){width=650px}
 
 </center>
 
@@ -101,7 +101,7 @@ Based on the correlogram shown below there is little correlation between the 6 n
 
 <center>
 
-![](../images/correlogram.png){width=500px}
+![Correlations for potentially significant variables in the explaining the price of Airbnb listings](../images/correlogram.png){width=500px}
 
 </center>
 
@@ -111,37 +111,71 @@ The violin plot below shows the distribution of price in log10 scale for each di
 
 <center>
 
-![](../images/violin_plot.png){width=675px}
+![Plot shows the distribution of listing prices for Airbnb listings in Barcelona, Spain by city district](../images/violin_plot.png){width=675px}
 
 </center>
 
-### Methods
+### Analysis Methods
 
-We performed linear regression on Airbnb listing's of price to district, type of room, reviews left per month, and distance from city center to see how these variables my be affecting the Airbnb listing prices in Barcelona.  A QQ-plot was created to assess the linear model probability residuals distributions to a normal distribution.
+We perform linear regression on Airbnb listing prices to the listing's district, type of room, reviews left per month, and distance from city center to see how these variables might be affecting the Airbnb listing prices in Barcelona. First, we run 
 
-### Results
+`lm(price ~ district + room_type + distance + reviews_per_month, data=df)` 
 
-We are interested in the linear relationship between an Airbnb listing's district, type of room, reviews left per month, and distance from city center to the listing's price. The results of the linear model are presented below.
+where our data is housed in the dataframe, `df` and look at the QQ-Plots of the standardized residuals. This plot is given as the left plot below. It is obvious that normality assumptions are not appropriate, so we then run 
 
-```{r lm-results}
-lm.1 <- readRDS(file=here::here("data", "lm_results"))
-tidy(lm.1)
-augment(lm.1)
-glance(lm.1)
-```
+`lm(log(price) ~ district + room_type + distance + reviews_per_month, data=df)` 
 
-The QQ-plot is presented to assess whether the assumption of normally distributed residuals is reasonable. We can see that the residuals have an extremely heavy upper tail and a light lower tail. This plot shows pretty convincing evidence that the normality assumption is not appropriate. For a better model, perhaps we should try transformations of the variables such as a log transformation of price.
+and look at the QQ-plot for the log transform of price. This QQ-plot is given below on the right and is much closer to the normality assumption even though there is evidence of heavier tails.
 
 <center>
 
-![](../images/QQ_plot.png){width=675px}
+![QQ-Plot for standardized residuals of the regression on the raw price data: The residuals show evidence that the errors are not normally distributed](../images/lm1-QQPlot.png){width=600px}
+
+![QQ-Plot for standardized residuals of the regression on the log transform of price data: The residuals seem to have heavier tails than the normal distribution, but are better suited for linear regression than the untransformed price data](../images/lm2-QQPlot.png){width=600px}
 
 </center>
+
+### Analysis Results
+
+First, let's look at the results of the linear regression for the untransformed price response variable. In the output below, we see that only 2 of the 10 districts, with Ciutat Vella as the base district, are statistically significant at the 95\% confidence level. These are Eixample and Sarri&#224;-Sant Gervasi. 
+
+```{r lm-results}
+#Linear Model on Price
+lm.1 <- readRDS(file=here::here("data", "lm1_results.rds"))
+tidy(lm.1)
+```
+
+We can interpret the estimate for Eixample, `r round(tidy(lm.1)[2,'estimate'], 1)`, as saying that prices of Airbnb listings in the Eixample district differ from listings in the Ciutat Vella district, on average, by `r round(tidy(lm.1)[2,'estimate'], 1)` Euro's per night. All room types, distance, and reviews per month are statistically significant at any reasonable confidence level.
+
+Next, we look at the results of the linear regression on the log(price) of Airbnb listings. In the output below, we see many more districts are now statistically significant, but the interpretation of their coefficient estimates are not as straightforward as the results when regressing on listing price.
+
+```{r lmlog-results}
+#Linear Model on log(Price)
+lm.2 <- readRDS(file=here::here("data", "lm2_results.rds"))
+tidy(lm.2)
+```
+
+Due to the improved QQ-Plot for the log(price) model, we only consider this model's results going forward. We can look at how well this model fits the data by randomly selecting 10 listings and comparing the price to the fitted price. 
+
+```{r fitted-price}
+set.seed(100)
+augment(lm.2) %>% 
+  slice(sample(1:nrow(augment(lm.2)), size=10, replace=FALSE)) %>% 
+  select(.rownames, district, room_type, distance, reviews_per_month, log.price., .fitted) %>% 
+  rename(price = log.price.,
+         fitted = .fitted) %>% 
+  mutate(price = exp(price),
+         fitted = exp(fitted))
+```
+
+In the output above, the `price` columns shows the listing's price from the Airbnb website and `fitted` shows the price given by the linear model. Note that we exponentiated this output so that it is in Euro's and straightforward to compare.
+
+Finally, we can look at the adjusted r-squared to see how much of the variance in listing price is explained by district, type of room, distance of city center, and reviews per month. By using the `glance()` function from the `broom` package, we see that `r round(glance(lm.2)$adj.r.squared, 4)*100`\% of the variance of the log transform of listing is explained by our model.
 
 
 ### Discussion 
 
-In determining the linear relationship between an Airbnb listing's district, type of room, reviews left per month, and distance from city center to the listing's price, the model made has an assumption of normal distribution.  However, Based on the QQ-plot, the residuals do not follow the linear trend and, therefore, the assumtion of a normal distribution does not hold. 
+Based on the results of our model using the log transform of listing price, district, type of room, distance from city center, and reviews per month all play a significant role in the price of an Airbnb listing. However, much of the variance is left unexplained in our model so that we may want to look for additional variables.
 
 
 ### References

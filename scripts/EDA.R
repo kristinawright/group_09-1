@@ -9,7 +9,7 @@ and a violin plot (price vs. district) for exploratory data analysis and saves t
 seperate png files from cleaned data. This script takes in clean data CSV file path and 
 image directory path where plots will be exported as the variable arguments.
 
-Usage: exploratory_data_analysis.R --path_clean=<path_clean> --path_image=<path_image>" -> doc
+Usage: scripts/EDA.R --path_clean=<path_clean> --path_image=<path_image>" -> doc
 
 ## Load Libraries ####
 suppressPackageStartupMessages(library(tidyverse))
@@ -65,7 +65,7 @@ density_plot <- function(df) {
     ggplot(aes(x=price)) + 
     geom_density() +
     theme_bw(14) +
-    theme(plot.title = element_text(size = 11)) +
+    theme(plot.title = element_text(size = 14)) +
     ggtitle(label="Price Density for All Listings") +
     scale_x_continuous("Listing Price per Night", labels=scales::dollar_format(suffix="\u20AC", prefix='')) +
     ylab("Density")
@@ -90,7 +90,7 @@ correlogram <- function(df){
              tl.srt=45, #text angled for better viewing
              addCoef.col = "black", # Add correlation coefficient
              diag = FALSE,
-             title="Correlation of Some Columns",
+             title="Correlation between Relevant Variables",
              mar=c(0,0,1,0)) # Correctly positions Title of Correlogram
 }
 
@@ -119,12 +119,13 @@ violin_plot <- function(df, mean.price){
   mutate(district = factor(district, levels = unique(mean.price$district))) %>% #factor district by descending mean price
   ggplot(aes(district, price)) +
   geom_violin(stat = "ydensity") +
-  scale_y_log10() +  # change to log10 scale since density of price is scewed
-  ylab("Price (€)") +
+  scale_y_log10() +  # change to log10 scale since density of price is skewed
+  ylab(paste("Price (", "\u20AC", ")", sep=''))
   xlab("District") +
   ggtitle("Distribution of Price for Each Barcelona District") +
-  theme_bw(15) +
-  theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1)) 
+  theme_bw(14) +
+  theme(plot.title = element_text(size = 14), 
+          axis.text.x = element_text(angle = 60, hjust = 1)) 
 }
 
 ### tests

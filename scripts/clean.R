@@ -11,7 +11,7 @@ The scripts one argument for the path to the raw data <path_raw>
 and the path to where we save the clean data <path_clean>. 
 This script loads the R libraries: tidyverse, docopt.
 
-Usage: clean_data.R --path_raw=<path_raw> --path_clean=<path_clean>" -> doc
+Usage: scripts/clean.R --path_raw=<path_raw> --path_clean=<path_clean>" -> doc
 
 ## Load Libraries ####
 ## Suppress messages from loading of libraries

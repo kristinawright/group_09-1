@@ -9,7 +9,7 @@ and a violin plot (price vs. district) for exploratory data analysis and saves t
 seperate png files from cleaned data. This script takes in clean data CSV file path and 
 image directory path where plots will be exported as the variable arguments.
 
-Usage: exploratory_data_analysis.R --path_clean=<path_clean> --path_image=<path_image>" -> doc
+Usage: scripts/EDA.R --path_clean=<path_clean> --path_image=<path_image>" -> doc
 
 ## Load Libraries ####
 suppressPackageStartupMessages(library(tidyverse))
@@ -119,8 +119,8 @@ violin_plot <- function(df, mean.price){
   mutate(district = factor(district, levels = unique(mean.price$district))) %>% #factor district by descending mean price
   ggplot(aes(district, price)) +
   geom_violin(stat = "ydensity") +
-  scale_y_log10() +  # change to log10 scale since density of price is scewed
-  ylab("Price (€)") +
+  scale_y_log10() +  # change to log10 scale since density of price is skewed
+  ylab(paste("Price (", "\u20AC", ")", sep=''))
   xlab("District") +
   ggtitle("Distribution of Price for Each Barcelona District") +
   theme_bw(14) +

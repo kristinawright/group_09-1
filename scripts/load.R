@@ -4,7 +4,7 @@
 ## Documentation of script
 "This script takes a required argument, data_url, that is a URL for the raw version of a *.csv dataset. That dataset is loaded R and saved in the data directory. This script loads the following R libraries: readr, docopt, here, glue.
 
-Usage: load_data.R --data_url=<data_url>
+Usage: scripts/load.R --data_url=<data_url>
 " -> doc #documentation
 
 ## Load libraries ####

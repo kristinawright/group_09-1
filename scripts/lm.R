@@ -5,7 +5,7 @@
 "This script performs linear regression on the price of listings against
 the independent variables district, room_type, reviews_per_month, and distance
 
-Usage: clean_data.R --path_data=<path_data>" -> doc
+Usage: scripts/lm.R --path_data=<path_data>" -> doc
 
 ## Load Libraries ####
 ## Suppress messages from loading of libraries

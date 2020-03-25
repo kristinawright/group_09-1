@@ -78,4 +78,4 @@ Asuna is looking to purchase a property in Barcelona to put up for rental on Air
  
 2. Dashboard sketch
 
-![](dashboard_sketch.jpg){width=600px}
+![](dashboard_sketch.jpg)

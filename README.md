@@ -76,7 +76,7 @@ This app will display a map of Barcelona with points that show the location of e
 
 2. Usage scenario
 
-Asuna is looking to purchase a property in Barcelona to put up for rental on Airbnb. She wants to know what type of property she should purchase to make the most money by exploring a dataset that identifies the locations and room types that make the most money.  While surfing the internet, Asuna finds "Barcelona Airbnb Price App." She is able to what is the most popular pricing for various districts in Barcelona and room types.  She thinks the most popular pricings will most likely have good booking rates and chooses a price slightly higher than the mean pricing in a higher priced district and room type listing to estimate her earnings.  Using this useful information, she can now make an informed decision on what type of property to purchase and what her expected net earnings are.
+Asuna is looking to purchase a property in Barcelona to put up for rental on Airbnb. She wants to know what type of property she should purchase to make the most money by exploring a dataset that identifies the locations and room types that make the most money.  While surfing the internet, Asuna finds "Barcelona Airbnb Price App." She is able to see what is the most popular pricing for various districts in Barcelona and room types.  She thinks the most popular pricings will most likely have good booking rates and chooses a price slightly higher than the mean pricing in a higher priced district and room type listing to estimate her earnings.  Using this useful information, she can now make an informed decision on what type of property to purchase and what her expected net earnings are.
  
 3. Dashboard sketch
 

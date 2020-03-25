@@ -114,18 +114,17 @@ mean_price <- function(df){
 #' @example
 #' violin_plot(clean.dat, mean.price)
 violin_plot <- function(df, mean.price){
- df%>%
-  filter(price != 0) %>% # remove price = 0 
-  mutate(district = factor(district, levels = unique(mean.price$district))) %>% #factor district by descending mean price
-  ggplot(aes(district, price)) +
-  geom_violin(stat = "ydensity") +
-  scale_y_log10() +  # change to log10 scale since density of price is skewed
-  ylab(paste("Price (", "\u20AC", ")", sep=''))
-  xlab("District") +
-  ggtitle("Distribution of Price for Each Barcelona District") +
-  theme_bw(14) +
-  theme(plot.title = element_text(size = 14), 
-          axis.text.x = element_text(angle = 60, hjust = 1)) 
+  df%>%
+    filter(price != 0) %>% # remove price = 0
+    mutate(district = factor(district, levels = unique(mean.price$district))) %>% #factor district by descending mean price
+    ggplot(aes(district, price)) +
+    geom_violin(stat = "ydensity") +
+    scale_y_log10() +  # change to log10 scale since density of price is scewed
+    ylab(paste("Price (", "\u20AC", ")", sep='')) +
+    xlab("District") +
+    ggtitle("Distribution of Price for Each Barcelona District") +
+    theme_bw(15) +
+    theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1)) 
 }
 
 ### tests

@@ -10,8 +10,8 @@ data/raw_listings.csv : scripts/load.R
 	Rscript scripts/load.R --data_url=https://raw.githubusercontent.com/STAT547-UBC-2019-20/data_sets/master/listings-Barcelona.csv
 
 # Clean/Process data
-data/clean_listings.csv : scripts/process.R data/raw_listings.csv
-	Rscript scripts/process.R --path_raw=data/raw_listings.csv --path_clean=data/clean_listings.csv
+data/clean_listings.csv : scripts/clean.R data/raw_listings.csv
+	Rscript scripts/clean.R --path_raw=data/raw_listings.csv --path_clean=data/clean_listings.csv
 
 # EDA
 images/correlogram.png images/density_plot.png images/biolin_plot.png : scripts/EDA.R data/clean_listings.csv

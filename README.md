@@ -67,3 +67,16 @@ Repository for Kristina Wright and Daniel Hadley group project for [STAT 547M](h
     
     c) **Delete all output from scripts**
     `make clean`
+    
+## 4. Dash App Proposal
+  
+1. Dashboard description and usage scenarios (~ 300 words)
+
+This app will display a map of Barcelona with points that show the location of each listing that are colour coded by price. The exact price, longitude, and latitude will be displayed when hovering over the points.  A violin plot of price vs. district and price vs. room type will additionally be displayed. The price ranges plotted on the map and two violin plots can be adjusted using a two way slider.  Specific districts (ie. areas of Barcelona) and room types can filtered using two dropdown lists for replotting of the map and two violin plots.
+
+Asuna is looking to purchase a property in Barcelona to put up for rental on Airbnb. She wants to know what type of property she should purchase to make the most money by exploring a dataset that identifies the locations and room types that make the most money.  While surfing the internet, Asuna finds "Barcelona Airbnb Listings App." She is able to what is the most popular pricing for various districts in Barcelona and room types.  She thinks the most popular pricings will most likely have good booking rates and chooses a price slightly higher than the mean pricing in a higher priced district and room type listing to estimate her earnings.  Using this useful information, she can now make an informed decision on what type of property to purchase and what her expected net earnings are.
+
+ 
+2. Dashboard sketch
+
+

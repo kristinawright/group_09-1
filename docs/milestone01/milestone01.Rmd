@@ -75,7 +75,7 @@ The data used in this analysis was compiled on November 9, 2019 and includes 20,
 # This chunk reads the csv data into R
 
 ## Specify filename using here::here() so it can be used by anyone
-filename <- here::here("data", "listings-Barcelona.csv")
+filename <- here::here("data", "raw_listings.csv")
 
 ## column types are specified to avoid the printing of this message
 ## by the read_csv() function
@@ -220,13 +220,14 @@ df%>%
   ggplot(aes(district, price)) +
   geom_violin(stat = "ydensity") +
   scale_y_log10() +  # change to log10 scale since density of price is scewed
-  ylab("Price (€)") +
+  ylab(paste("Price (", "\u20AC", ")", sep='')) +
   xlab("District") +
   ggtitle("Distribution of Price for Each Barcelona District") +
   theme_bw(15) +
   theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1)) # x axis labels angled to view text clearly
 
 ```
+
 
 ### Research Question
 

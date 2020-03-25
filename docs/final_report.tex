@@ -385,7 +385,14 @@ their listings in increments of 50 Euros. For example, the Density Plot,
 we see multi-modes, where each mode after the largest mode occurs at
 every 50 Euro increment along the x-axis
 
+\begin{figure}
+\centering
 \includegraphics[width=6.77083in,height=\textheight]{../images/density_plot.png}
+\caption{Density plot for prices of Airbnb listings in Barcelona, Spain:
+Listings have an extreme positive skew and appear to be multimodal. The
+modality reflects the tendency for listings to be priced in increments
+of 50 Euros}
+\end{figure}
 
 \hypertarget{correlogram}{%
 \paragraph{Correlogram}\label{correlogram}}
@@ -394,7 +401,12 @@ Based on the correlogram shown below there is little correlation between
 the 6 numerical variables presented. All positive correlations are in
 blue, and all negative correlations are in red.
 
+\begin{figure}
+\centering
 \includegraphics[width=5.20833in,height=\textheight]{../images/correlogram.png}
+\caption{Correlations for potentially significant variables in the
+explaining the price of Airbnb listings}
+\end{figure}
 
 \hypertarget{violin-plot}{%
 \paragraph{Violin Plot}\label{violin-plot}}
@@ -404,7 +416,12 @@ each district in descending order of average price. Based on the plot,
 Example has the highest priced and Nou Barris has the lowest priced
 listings.
 
+\begin{figure}
+\centering
 \includegraphics[width=7.03125in,height=\textheight]{../images/violin_plot.png}
+\caption{Plot shows the distribution of listing prices for Airbnb
+listings in Barcelona, Spain by city district}
+\end{figure}
 
 \hypertarget{analysis-methods}{%
 \subsubsection{Analysis Methods}\label{analysis-methods}}
@@ -427,8 +444,22 @@ and look at the QQ-plot for the log transform of price. This QQ-plot is
 given below on the right and is much closer to the normality assumption
 even though there is evidence of heavier tails.
 
-\includegraphics[width=4.6875in,height=\textheight]{../images/lm1-QQPlot.png}
-\includegraphics[width=4.6875in,height=\textheight]{../images/lm2-QQPlot.png}
+\begin{figure}
+\centering
+\includegraphics[width=6.25in,height=\textheight]{../images/lm1-QQPlot.png}
+\caption{QQ-Plot for standardized residuals of the regression on the raw
+price data: The residuals show evidence that the errors are not normally
+distributed}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=6.25in,height=\textheight]{../images/lm2-QQPlot.png}
+\caption{QQ-Plot for standardized residuals of the regression on the log
+transform of price data: The residuals seem to have heavier tails than
+the normal distribution, but are better suited for linear regression
+than the untransformed price data}
+\end{figure}
 
 \hypertarget{analysis-results}{%
 \subsubsection{Analysis Results}\label{analysis-results}}

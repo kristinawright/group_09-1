@@ -27,30 +27,14 @@ clean.dat <- load_clean(path_clean)
 
 
 # Create the slider
-slider_options <-  data.frame("value" = 0:4, "labels" =c("Fair", "Good", "Very Good", "Premium", "Ideal"))
 max.price<-max(clean.dat$price)
 
-dccRangeSlider(
-  marks = setNames(lapply(0:max.price, 
-   paste(as.character(0:max.price), ("\u20AC")))),
-  min = -5,
-  max = 6,
-  value = list(-3,4)
-)
-
 slider<-dccRangeSlider(
+  id='slider',
   min=0,
-  max=4,
-  id = "slider",
-  marks = list(
-    "0" = "Fair",
-    "1" = "Good",
-    "2" = "Very Good",
-    "3" = "Premium",
-    "4" = "Ideal"
-  ),
-  value= 4
-)
+  max=max.price,
+  step=1,
+  value=list(0, max.price))
 
 
 # 1: violin plot
@@ -64,13 +48,12 @@ mean_price <- function(df){
 }
 mean.price <- mean_price(clean.dat)
 
-violin_plot1 <- function(price.slider = c(0, max.price), mean.price){
-  
-  filter.clarity <- dropdown_options$labels[dropdown_options$value==price.slider]
+violin_plot1 <- function(price.slider = c(0, max.price)){
   
   df1<-clean.dat
   df1<- clean.dat %>%
-    filter(clean.dat$price %in% price.slider)
+    filter(clean.dat$price > price.slider[1]) %>%
+    filter(price < price.slider[2])
   
   p1<-df1%>%
     filter(price != 0) %>% # remove price = 0
@@ -80,7 +63,7 @@ violin_plot1 <- function(price.slider = c(0, max.price), mean.price){
     scale_y_log10() +  # change to log10 scale since density of price is scewed
     ylab(paste("Price (", "\u20AC", ")", sep='')) +
     xlab("District") +
-    ggtitle(paste0("Distribution of Price from ", price.slider[1], " to ", price.slider[2], "for Each Barcelona District")) +
+    ggtitle(paste0("Distribution of Price from ", price.slider[1], " to ", price.slider[2], " for Each Barcelona District")) +
     theme_bw(15) +
     theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1)) 
   
@@ -92,7 +75,7 @@ violin_plot1 <- function(price.slider = c(0, max.price), mean.price){
 # Assign components to variables
 heading_main = htmlH1('My Dash app :)')
 
-graph_1 = dccGraph(id='violin1',figure = violin_plot1(clean.dat, mean.price))
+graph_1 = dccGraph(id='violin1',figure = violin_plot1())
 
 
 app <- Dash$new()
@@ -104,6 +87,8 @@ app$layout(
 	htmlDiv(
 		list(
 			 heading_main,
+			 htmlDiv(id='output-container-range-slider'),
+			 slider,
 			 graph_1
 		)
 	)
@@ -117,7 +102,14 @@ app$callback(
   params=list(input(id = 'slider', property='value')),
   #this translates your list of params into function arguments
   function(price.sliderr) {
-    make_plot2(price.sliderr)
+    violin_plot1(price.sliderr)
+  })
+
+app$callback(
+  output(id = 'output-container-range-slider', property='children'),
+  params=list(input(id='slider', property='value')),
+  function(value) {
+    sprintf('You have selected [%0.1f, %0.1f]', value[1], value[2])
   })
 
 app$run_server(debug=TRUE)

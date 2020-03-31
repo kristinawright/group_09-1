@@ -36,6 +36,13 @@ slider<-dccRangeSlider(
   step=1,
   value=list(0, max.price))
 
+#Create the button 
+logbutton <- dccRadioItems(
+  id = 'yaxis-type',
+  options = list(list(label = 'Linear', value = 'linear'),
+                 list(label = 'Log', value = 'log')),
+  value = 'linear'
+)
 
 # 1: violin plot
 
@@ -48,7 +55,7 @@ mean_price <- function(df){
 }
 mean.price <- mean_price(clean.dat)
 
-violin_plot1 <- function(price.slider = c(0, max.price)){
+violin_plot1 <- function(price.slider = c(0, max.price), scale = "linear"){
   
   df1<-clean.dat
   df1<- clean.dat %>%
@@ -60,12 +67,15 @@ violin_plot1 <- function(price.slider = c(0, max.price)){
     mutate(district = factor(district, levels = unique(mean.price$district))) %>% #factor district by descending mean price
     ggplot(aes(district, price)) +
     geom_violin(stat = "ydensity") +
-    scale_y_log10() +  # change to log10 scale since density of price is scewed
     ylab(paste("Price (", "\u20AC", ")", sep='')) +
     xlab("District") +
-    ggtitle(paste0("Distribution of Price from ", price.slider[1], " to ", price.slider[2], " for Each Barcelona District")) +
+    ggtitle(paste0("Distribution of Price from ", price.slider[1], " to ", price.slider[2], " \u20AC for Each Barcelona District over time (Scale : ", scale,")")) +
     theme_bw(15) +
     theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1)) 
+  
+  if (scale == 'log'){
+    p1 <- p1 + scale_y_continuous(trans='log10')
+  }
   
   ggplotly(p1)
   }
@@ -87,8 +97,11 @@ app$layout(
 	htmlDiv(
 		list(
 			 heading_main,
+			 htmlLabel('Select price range :'),
 			 htmlDiv(id='output-container-range-slider'),
 			 slider,
+			 htmlLabel('Select y scale : '),
+			 logbutton,
 			 graph_1
 		)
 	)
@@ -99,17 +112,19 @@ app$callback(
   #update figure of gap-graph
   output=list(id = 'violin1', property='figure'),
   #based on values of components
-  params=list(input(id = 'slider', property='value')),
+  params=list(input(id = 'slider', property='value'),
+              input(id = 'yaxis-type', property='value')),
   #this translates your list of params into function arguments
-  function(price.sliderr) {
-    violin_plot1(price.sliderr)
+  function(price.sliderr, yaxis_scale) {
+    violin_plot1(price.sliderr, yaxis_scale)
   })
 
 app$callback(
   output(id = 'output-container-range-slider', property='children'),
   params=list(input(id='slider', property='value')),
   function(value) {
-    sprintf('You have selected [%0.1f, %0.1f]', value[1], value[2])
+    paste0("You have selected ", value[1], " to ", value[2], " \u20AC") 
   })
+
 
 app$run_server(debug=TRUE)

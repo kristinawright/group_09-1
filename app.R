@@ -91,6 +91,35 @@ checklist2<- dccChecklist(
   value=as.character(levels(clean.dat$room_type))
 )
 
+# 0: map
+
+map_maker <- function(price.slider = c(0, max.price),  districtc = as.character(levels(clean.dat$district)),  room.typec = as.character(levels(clean.dat$room_type))){
+  
+  df0<-clean.dat
+  df0<- clean.dat %>%
+    filter(clean.dat$price > price.slider[1]) %>%
+    filter(price < price.slider[2]) %>%
+    filter(district %in% districtc) %>%
+    filter(room_type %in% room.typec)
+  
+  fig <- df0 
+  fig <- fig %>%
+    plot_ly(
+      lat = ~latitude,
+      lon = ~longitude,
+      color = ~price, 
+      alpha = 0.3,
+      type = 'scattermapbox',
+      hovertext = df0[,"district"]) 
+  fig <- fig %>%
+    layout(title = 'Barceeee',
+      mapbox = list(
+        style = 'open-street-map',
+        zoom =10.5,
+        center = list(lon = ~median(longitude), lat = ~median(latitude))))
+  fig
+
+}
 
 # 1: violin plot
 
@@ -152,6 +181,7 @@ violin_plot2 <- function(price.slider = c(0, max.price), scale = "linear", room.
 # Assign components to variables
 heading_main = htmlH1('My Dash app :)')
 
+graph_0 = dccGraph(id='map',figure=map_maker()) 
 graph_1 = dccGraph(id='violin1',figure = violin_plot1())
 graph_2 = dccGraph(id='violin2',figure = violin_plot2())
 
@@ -160,25 +190,116 @@ app <- Dash$new()
 
 # Load the data here
 
-
 app$layout(
-	htmlDiv(
-		list(
-			 heading_main,
-			 htmlLabel('Select price range :'),
-			 htmlDiv(id='output-container-range-slider'),
-			 slider,
-			 htmlLabel('Select y scale : '),
-			 logbutton,
-			 checklist,
-			 checklist2,
-			 graph_1,
-			 graph_2
-		)
-	)
+  # TITLE BAR
+  htmlDiv(
+    list(
+      heading_main
+    ), style = list('columnCount'=1, 
+                    'background-color'= 'black', 
+                    'color'='white',
+                    'text-align'='center')
+  ),
+  # SIDEBAR
+  htmlDiv(
+    list(
+      htmlDiv(
+        list(
+          htmlDiv(
+            list(
+              # Dropdown
+              dccMarkdown('**Select price range :**'),
+              htmlDiv(id='output-container-range-slider'),
+              slider,
+              
+              # Use htmlBr() for line breaks
+              htmlBr(),
+              
+              #logbutton
+              htmlLabel('Select y scale : '),
+              logbutton,
+              
+              htmlBr(),
+              
+              #checklists
+              htmlLabel('Select district(s) : '),
+              checklist,
+              
+              htmlBr(),
+              
+              htmlLabel('Select room type(s) : '),
+              checklist2,
+              
+              # Some placeholder text
+              htmlP("Motor Trend Car Road Tests
+Description
+The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models). Source: https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html")
+              
+            ), style = list('background-color'='lightgrey', 
+                            'columnCount'=1, 
+                            'white-space'='pre-line',
+                            "flex-basis" = "20%")
+          ),
+          htmlDiv(
+            list(
+              htmlDiv(
+                list(
+                  htmlDiv(
+                    list(
+                      # map here
+                      graph_0,
+                      
+                      # histograms here
+                      graph_1,
+                      graph_2
+                    ), style=list("flex-basis"='100%')
+                  )
+                ), style = list('display'='flex',"flex-basis"='100%')
+              )
+              
+              
+            ), style = list('display'='flex',"flex-basis"='100%')
+          )
+        ), style=list('display'='flex',"flex-basis"='100%')
+      )
+    ), style = list('display'='flex',"flex-basis"='100%')
+  )
 )
 
+
+# app$layout(
+# 	htmlDiv(
+# 		list(
+# 			 heading_main,
+# 			 graph_0,
+# 			 htmlLabel('Select price range :'),
+# 			 htmlDiv(id='output-container-range-slider'),
+# 			 slider,
+# 			 htmlLabel('Select y scale : '),
+# 			 logbutton,
+# 			 htmlLabel('Select district(s) : '),
+# 			 checklist,
+# 			 htmlLabel('Select room type(s) : '),
+# 			 checklist2,
+# 			 graph_1,
+# 			 graph_2
+# 		)
+# 	)
+# )
+
 #app callbacks
+app$callback(
+  #update figure of gap-graph
+  output=list(id = 'map', property='figure'),
+  #based on values of components
+  params=list(input(id = 'slider', property='value'),
+              input(id = 'checklist', property='value'),
+              input(id = 'checklist2', property='value')),
+  #this translates your list of params into function arguments
+  function(price.sliderr, checking, checking2) {
+    map_maker(price.sliderr, checking, checking2)
+  })
+
 app$callback(
   #update figure of gap-graph
   output=list(id = 'violin1', property='figure'),

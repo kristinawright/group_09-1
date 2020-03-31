@@ -185,6 +185,10 @@ graph_0 = dccGraph(id='map',figure=map_maker())
 graph_1 = dccGraph(id='violin1',figure = violin_plot1())
 graph_2 = dccGraph(id='violin2',figure = violin_plot2())
 
+text <- dccMarkdown("_Motor Trend Car Road Tests
+Description
+The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models).
+                    **Source:** https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html _")
 
 app <- Dash$new()
 
@@ -196,7 +200,7 @@ app$layout(
     list(
       heading_main
     ), style = list('columnCount'=1, 
-                    'background-color'= 'black', 
+                    'background-color'= '#271A52', 
                     'color'='white',
                     'text-align'='center')
   ),
@@ -208,7 +212,7 @@ app$layout(
           htmlDiv(
             list(
               # Dropdown
-              dccMarkdown('**Select price range :**'),
+              htmlLabel('Select price range :', style = list("font-size" = "15pt", "font-weight" = "500", "letter-spacing" = "1px", "color"="#9B2428")),
               htmlDiv(id='output-container-range-slider'),
               slider,
               
@@ -216,29 +220,34 @@ app$layout(
               htmlBr(),
               
               #logbutton
-              htmlLabel('Select y scale : '),
+              htmlLabel('Select y scale : ' , style = list("font-size" = "15pt", "font-weight" = "500", "letter-spacing" = "1px", "color"="#9B2428")),
+              htmlBr(),
               logbutton,
               
               htmlBr(),
+              htmlBr(),
               
               #checklists
-              htmlLabel('Select district(s) : '),
+              htmlLabel('Select district(s) : ', style = list("font-size" = "15pt", "font-weight" = "500", "letter-spacing" = "1px", "color"="#9B2428")),
+              htmlBr(),
               checklist,
               
               htmlBr(),
+              htmlBr(),
               
-              htmlLabel('Select room type(s) : '),
+              htmlLabel('Select room type(s) : ', style = list("font-size" = "15pt", "font-weight" = "500", "letter-spacing" = "1px", "color"="#9B2428")),
               checklist2,
               
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
               # Some placeholder text
-              htmlP("Motor Trend Car Road Tests
-Description
-The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models). Source: https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html")
-              
-            ), style = list('background-color'='lightgrey', 
+              text), style = list('background-color'='#FFF8CF', 
                             'columnCount'=1, 
                             'white-space'='pre-line',
-                            "flex-basis" = "20%")
+                            "flex-basis" = "20%",
+                            'text-align'='center')
           ),
           htmlDiv(
             list(
@@ -252,7 +261,7 @@ The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel
                       # histograms here
                       graph_1,
                       graph_2
-                    ), style=list("flex-basis"='100%')
+                    ), style=list(  "flex-basis"='100%')
                   )
                 ), style = list('display'='flex',"flex-basis"='100%')
               )

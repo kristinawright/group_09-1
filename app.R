@@ -80,7 +80,8 @@ checklist<- dccChecklist(
 
 # 2: Create the checklist
 xaxisKey2 <- tibble(labels = as.character(levels(clean.dat$room_type)),
-                   value = as.character(levels(clean.dat$room_type)))
+                   value = as.character(levels(clean.dat$room_type))) 
+xaxisKey2$labels[xaxisKey2$labels == "Entire home/apt"] <- "Entire home/apartment"
 
 checklist2<- dccChecklist(
   id = "checklist2",
@@ -109,10 +110,9 @@ map_maker <- function(price.slider = c(0, max.price),  districtc = as.character(
       lon = ~longitude,
       color = ~price, 
       alpha = 0.3,
-      type = 'scattermapbox',
-      hovertext = df0[,"district"]) 
+      type = 'scattermapbox') 
   fig <- fig %>%
-    layout(title = 'Barceeee',
+    layout(title = 'Barcelona Airbnb listings',
       mapbox = list(
         style = 'open-street-map',
         zoom =10.5,
@@ -179,16 +179,16 @@ violin_plot2 <- function(price.slider = c(0, max.price), scale = "linear", room.
 
 
 # Assign components to variables
-heading_main = htmlH1('My Dash app :)')
+heading_main = htmlH1('Barcelona Airbnb Price App :)')
 
 graph_0 = dccGraph(id='map',figure=map_maker()) 
 graph_1 = dccGraph(id='violin1',figure = violin_plot1())
 graph_2 = dccGraph(id='violin2',figure = violin_plot2())
 
-text <- dccMarkdown("_Motor Trend Car Road Tests
-Description
-The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models).
-                    **Source:** https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html _")
+text <- dccMarkdown("_
+This app shows the distribution of price for each Airbnb listing in Barcelona across districts, room types, and geographical locations in 3 plots.
+This data was compiled November 9, 2019.  
+                    **Source:** http://insideairbnb.com/get-the-data.html _")
 
 app <- Dash$new()
 

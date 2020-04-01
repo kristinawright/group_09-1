@@ -24,6 +24,8 @@ load_clean <- function(path_clean) {
 }
 path_clean <- "data/clean_listings.csv"
 
+clean.dat <- load_clean(path_clean)
+
 mean_price <- function(df){
   df %>% 
     # calculate the mean price for each district for plot ordering
@@ -42,7 +44,7 @@ mean_price2 <- function(df){
 }
 mean.price2 <- mean_price2(clean.dat)
 
-clean.dat <- load_clean(path_clean) %>%
+clean.dat <- clean.dat %>%
   mutate(district = factor(district, levels = unique(mean.price$district))) %>% #factor district by descending mean price
   mutate(room_type = factor(room_type, levels = unique(mean.price2$room_type))) #factor room_type by descending mean price
 

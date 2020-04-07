@@ -100,10 +100,11 @@ map_maker <- function(price.slider = c(0, max.price),  districtc = as.character(
   
   df0<-clean.dat
   df0<- clean.dat %>%
-    filter(clean.dat$price > price.slider[1]) %>%
-    filter(price < price.slider[2]) %>%
+    filter(clean.dat$price >= price.slider[1]) %>%
+    filter(price <= price.slider[2]) %>%
     filter(district %in% districtc) %>%
-    filter(room_type %in% room.typec)
+    filter(room_type %in% room.typec) 
+
   
   fig <- df0 
   fig <- fig %>%
@@ -120,7 +121,8 @@ map_maker <- function(price.slider = c(0, max.price),  districtc = as.character(
         zoom =10.5,
         center = list(lon = ~median(longitude), lat = ~median(latitude))))
   fig
-
+  
+  
 }
 
 # 1: violin plot
@@ -129,8 +131,8 @@ violin_plot1 <- function(price.slider = c(0, max.price), scale = "linear", distr
   
   df1<-clean.dat
   df1<- clean.dat %>%
-    filter(clean.dat$price > price.slider[1]) %>%
-    filter(price < price.slider[2]) %>%
+    filter(clean.dat$price >= price.slider[1]) %>%  # min
+    filter(price <= price.slider[2]) %>%  # max
     filter(district %in% districtc) 
     
   
@@ -157,8 +159,8 @@ violin_plot2 <- function(price.slider = c(0, max.price), scale = "linear", room.
 
   df2<-clean.dat
   df2<- clean.dat %>%
-    filter(clean.dat$price > price.slider[1]) %>%
-    filter(price < price.slider[2]) %>%
+    filter(clean.dat$price >= price.slider[1]) %>%
+    filter(price <= price.slider[2]) %>%
     filter(room_type %in% room.typec)
 
 
@@ -213,6 +215,15 @@ app$layout(
         list(
           htmlDiv(
             list(
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
               # Dropdown
               htmlLabel('Select price range :', style = list("font-size" = "15pt", "font-weight" = "500", "letter-spacing" = "1px", "color"="#9B2428")),
               htmlDiv(id='output-container-range-slider'),
@@ -220,12 +231,9 @@ app$layout(
               
               # Use htmlBr() for line breaks
               htmlBr(),
-              
-              #logbutton
-              htmlLabel('Select y scale : ' , style = list("font-size" = "15pt", "font-weight" = "500", "letter-spacing" = "1px", "color"="#9B2428")),
               htmlBr(),
-              logbutton,
-              
+              htmlBr(),
+              htmlBr(),
               htmlBr(),
               htmlBr(),
               
@@ -236,10 +244,33 @@ app$layout(
               
               htmlBr(),
               htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              
+
+              #logbutton
+              htmlLabel('Select y scale : ' , style = list("font-size" = "15pt", "font-weight" = "500", "letter-spacing" = "1px", "color"="#9B2428")),
+              htmlBr(),
+              logbutton,
+              
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
               
               htmlLabel('Select room type(s) : ', style = list("font-size" = "15pt", "font-weight" = "500", "letter-spacing" = "1px", "color"="#9B2428")),
               checklist2,
               
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
               htmlBr(),
               htmlBr(),
               htmlBr(),
@@ -257,6 +288,9 @@ app$layout(
                 list(
                   htmlDiv(
                     list(
+                      
+                      htmlBr(),
+                      
                       # map here
                       graph_0,
                       
@@ -265,6 +299,7 @@ app$layout(
                       graph_2
                     ), style=list(  "flex-basis"='100%')
                   )
+                  
                 ), style = list('display'='flex',"flex-basis"='100%')
               )
               
@@ -341,6 +376,7 @@ app$callback(
   function(value) {
     paste0("You have selected ", value[1], " to ", value[2], " \u20AC") 
   })
+
 
 
 app$run_server(debug=TRUE)

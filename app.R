@@ -58,7 +58,9 @@ slider<-dccRangeSlider(
   min=0,
   max=max.price,
   step=1,
-  value=list(0, max.price))
+  value=list(0, max.price),
+  pushable = 10,
+  allowCross = FALSE)
 
 # Create the button 
 logbutton <- dccRadioItems(

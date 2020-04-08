@@ -121,6 +121,7 @@ map_maker <- function(price.slider = c(0, max.price),  districtc = as.character(
       lon = ~longitude,
       color = ~price, 
       alpha = 0.7,
+      mode = 'markers',
       type = 'scattermapbox') 
   fig <- fig %>%
     layout(title = 'Barcelona Airbnb listings',
@@ -406,5 +407,5 @@ app$callback(
 
 
 
+app$run_server(host = '0.0.0.0', port = Sys.getenv('PORT', 8050))
 
-app$run_server(debug=TRUE)

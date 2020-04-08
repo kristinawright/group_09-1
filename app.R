@@ -16,6 +16,7 @@ library(plotly)
 library(purrr)
 library(tibble)
 library(tidyverse)
+library(ggridges)
 
 # Load the data here
 load_clean <- function(path_clean) {
@@ -135,15 +136,16 @@ violin_plot1 <- function(price.slider = c(0, max.price), scale = "linear", distr
     filter(price <= price.slider[2]) %>%  # max
     filter(district %in% districtc) 
     
-  
   p1<-df1%>%
-    ggplot(aes(district, price)) +
+    ggplot(aes(district, price,fill = stat(x))) +
     geom_violin(stat = "ydensity") +
     ylab(paste("Price (", "\u20AC", ")", sep='')) +
     xlab("District") +
+    scale_fill_viridis_c(name = "District", option = "B") +
     ggtitle(paste0("Distribution of Price from ", price.slider[1], " to ", price.slider[2], " \u20AC by Barcelona District over time (Scale : ", scale,")")) +
     theme_bw(15) +
-    theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1)) 
+    theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1),legend.position = "none") 
+
   
   if (scale == 'log'){
     p1 <- p1 + scale_y_continuous(trans='log10')
@@ -165,13 +167,14 @@ violin_plot2 <- function(price.slider = c(0, max.price), scale = "linear", room.
 
 
   p2<-df2%>%
-    ggplot(aes(room_type, price)) +
+    ggplot(aes(room_type, price, fill=stat(x))) +
     geom_violin(stat = "ydensity") +
     ylab(paste("Price (", "\u20AC", ")", sep='')) +
     xlab("Room Type") +
+    scale_fill_viridis_c(name = "Room Type",option = "E") +
     ggtitle(paste0("Distribution of Price from ", price.slider[1], " to ", price.slider[2], " \u20AC by Room Type over time (Scale : ", scale,")")) +
     theme_bw(15) +
-    theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1))
+    theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1),legend.position = "none")
 
   if (scale == 'log'){
     p2 <- p2 + scale_y_continuous(trans='log10')

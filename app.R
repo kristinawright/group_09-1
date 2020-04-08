@@ -318,10 +318,10 @@ app$layout(
                     list(
                       
                       htmlBr(),
-                      
+
                       # map here
                       graph_0,
-                      
+
                       # histograms here
                       graph_1,
                       graph_2

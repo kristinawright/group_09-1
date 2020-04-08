@@ -16,6 +16,7 @@ library(plotly)
 library(purrr)
 library(tibble)
 library(tidyverse)
+library(ggridges)
 
 # Load the data here
 load_clean <- function(path_clean) {
@@ -57,7 +58,9 @@ slider<-dccRangeSlider(
   min=0,
   max=max.price,
   step=1,
-  value=list(0, max.price))
+  value=list(0, max.price),
+  pushable = 10,
+  allowCross = FALSE)
 
 # Create the button 
 logbutton <- dccRadioItems(
@@ -94,16 +97,23 @@ checklist2<- dccChecklist(
   value=as.character(levels(clean.dat$room_type))
 )
 
+# no data plot
+
+no.data <- data.frame(x=c(0,0,0,0,0,0,0,0,0,1,2,3,4,5,6,7,8,8,8,8,8,8,8,8,8,10,10,10,10,10,11,11,12,12,13,13,14,14,15,15,16,16,16,16,16,28,28,28,28,28,28,28,28,28,29,29,30,30,31,31,32,32,33,33,34,34,34,34,34,36,36.5,37,37.5,38,38.5,39,39.5,40,40.5,41,41.5,42,42.5,43,43.5,44,38.5,39.5,40.5,41.5,46,47,48,49,50,51,52,49,49,49,49,49,49,49,49,54,54.5,55,55.5,56,56.5,57,57.5,58,58.5,59,59.5,60,60.5,61,61.5,62,56.5,57.5,58.5,59.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,8.5,8.5,8.5,8.5,8.5,8.5,8.5,8.5,10.5,10.5,10.5,10.5,10.5,11.5,11.5,12.5,12.5,13.5,13.5,14.5,14.5,15.5,15.5,16.5,16.5,16.5,16.5,16.5,28.5,28.5,28.5,28.5,28.5,28.5,28.5,28.5,28.5,29.5,29.5,30.5,30.5,31.5,31.5,32.5,32.5,33.5,33.5,34.5,34.5,34.5,34.5,34.5,36.5,37,37.5,38,38.5,39,39.5,40,40.5,41,41.5,42,42.5,43,43.5,44,44.5,39,40,41,42,46.5,47.5,48.5,49.5,50.5,51.5,52.5,49.5,49.5,49.5,49.5,49.5,49.5,49.5,49.5,54.5,55,55.5,56,56.5,57,57.5,58,58.5,59,59.5,60,60.5,61,61.5,62,62.5,57,58,59,60),
+y=c(0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0,1,2,3,4,5,6,7,8,2,3,4,5,6,1,7,0,8,0,8,0,8,1,7,2,3,4,5,6,0,1,2,3,4,5,6,7,8,0,8,0,8,0,8,0,8,1,7,2,6,3,4,5,0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0,3,3,3,3,8,8,8,8,8,8,8,0,1,2,3,4,5,6,7,0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0,3,3,3,3,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,7.5,6.5,5.5,4.5,3.5,2.5,1.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,2.5,3.5,4.5,5.5,6.5,1.5,7.5,0.5,8.5,0.5,8.5,0.5,8.5,1.5,7.5,2.5,3.5,4.5,5.5,6.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,0.5,8.5,0.5,8.5,0.5,8.5,0.5,8.5,1.5,7.5,2.5,6.5,3.5,4.5,5.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,7.5,6.5,5.5,4.5,3.5,2.5,1.5,0.5,3.5,3.5,3.5,3.5,8.5,8.5,8.5,8.5,8.5,8.5,8.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,7.5,6.5,5.5,4.5,3.5,2.5,1.5,0.5,3.5,3.5,3.5,3.5))
+
+
 # 0: map
 
 map_maker <- function(price.slider = c(0, max.price),  districtc = as.character(levels(clean.dat$district)),  room.typec = as.character(levels(clean.dat$room_type))){
   
   df0<-clean.dat
   df0<- clean.dat %>%
-    filter(clean.dat$price > price.slider[1]) %>%
-    filter(price < price.slider[2]) %>%
+    filter(clean.dat$price >= price.slider[1]) %>%
+    filter(price <= price.slider[2]) %>%
     filter(district %in% districtc) %>%
-    filter(room_type %in% room.typec)
+    filter(room_type %in% room.typec) 
+
   
   fig <- df0 
   fig <- fig %>%
@@ -111,7 +121,7 @@ map_maker <- function(price.slider = c(0, max.price),  districtc = as.character(
       lat = ~latitude,
       lon = ~longitude,
       color = ~price, 
-      alpha = 0.3,
+      alpha = 0.7,
       type = 'scattermapbox') 
   fig <- fig %>%
     layout(title = 'Barcelona Airbnb listings',
@@ -120,34 +130,42 @@ map_maker <- function(price.slider = c(0, max.price),  districtc = as.character(
         zoom =10.5,
         center = list(lon = ~median(longitude), lat = ~median(latitude))))
   fig
-
+  
+  
 }
 
 # 1: violin plot
 
 violin_plot1 <- function(price.slider = c(0, max.price), scale = "linear", districtc = as.character(levels(clean.dat$district))){
   
+  p1<-ggplot(no.data,aes(x, y)) +
+    geom_point() 
+  
   df1<-clean.dat
   df1<- clean.dat %>%
-    filter(clean.dat$price > price.slider[1]) %>%
-    filter(price < price.slider[2]) %>%
+    filter(clean.dat$price >= price.slider[1]) %>%  # min
+    filter(price <= price.slider[2]) %>%  # max
     filter(district %in% districtc) 
-    
-  
+
+  if (nrow(df1) > 0){   
   p1<-df1%>%
-    ggplot(aes(district, price)) +
+    ggplot(aes(district, price,fill = stat(x))) +
     geom_violin(stat = "ydensity") +
     ylab(paste("Price (", "\u20AC", ")", sep='')) +
     xlab("District") +
+    scale_fill_viridis_c(name = "District", option = "B") +
     ggtitle(paste0("Distribution of Price from ", price.slider[1], " to ", price.slider[2], " \u20AC by Barcelona District over time (Scale : ", scale,")")) +
     theme_bw(15) +
-    theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1)) 
+    theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1),legend.position = "none") 
+
   
   if (scale == 'log'){
     p1 <- p1 + scale_y_continuous(trans='log10')
-  }
+  }}
+  
   
   ggplotly(p1)
+  
   }
 
 
@@ -155,27 +173,37 @@ violin_plot1 <- function(price.slider = c(0, max.price), scale = "linear", distr
 
 violin_plot2 <- function(price.slider = c(0, max.price), scale = "linear", room.typec = as.character(levels(clean.dat$room_type))){
 
+  p2<-ggplot(no.data,aes(x, y)) +
+    geom_point()
+
   df2<-clean.dat
   df2<- clean.dat %>%
-    filter(clean.dat$price > price.slider[1]) %>%
-    filter(price < price.slider[2]) %>%
+    filter(clean.dat$price >= price.slider[1]) %>%
+    filter(price <= price.slider[2]) %>%
     filter(room_type %in% room.typec)
-
-
+  
+  if (nrow(df2) > 0){
   p2<-df2%>%
-    ggplot(aes(room_type, price)) +
+    ggplot(aes(room_type, price, fill=stat(x))) +
     geom_violin(stat = "ydensity") +
     ylab(paste("Price (", "\u20AC", ")", sep='')) +
     xlab("Room Type") +
+    scale_fill_viridis_c(name = "Room Type",option = "E") +
     ggtitle(paste0("Distribution of Price from ", price.slider[1], " to ", price.slider[2], " \u20AC by Room Type over time (Scale : ", scale,")")) +
     theme_bw(15) +
-    theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1))
+    theme(plot.title = element_text(size = 14), axis.text.x = element_text(angle = 60, hjust = 1),legend.position = "none")
 
   if (scale == 'log'){
     p2 <- p2 + scale_y_continuous(trans='log10')
-  }
+  }}
+  
 
-  ggplotly(p2)
+
+  
+  
+
+   ggplotly(p2)
+
 }
 
 
@@ -183,9 +211,12 @@ violin_plot2 <- function(price.slider = c(0, max.price), scale = "linear", room.
 # Assign components to variables
 heading_main = htmlH1('Barcelona Airbnb Price App :)')
 
+
 graph_0 = dccGraph(id='map',figure=map_maker()) 
 graph_1 = dccGraph(id='violin1',figure = violin_plot1())
 graph_2 = dccGraph(id='violin2',figure = violin_plot2())
+
+
 
 text <- dccMarkdown("_
 This app shows the distribution of price for each Airbnb listing in Barcelona across districts, room types, and geographical locations in 3 plots.
@@ -213,6 +244,15 @@ app$layout(
         list(
           htmlDiv(
             list(
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
               # Dropdown
               htmlLabel('Select price range :', style = list("font-size" = "15pt", "font-weight" = "500", "letter-spacing" = "1px", "color"="#9B2428")),
               htmlDiv(id='output-container-range-slider'),
@@ -220,12 +260,9 @@ app$layout(
               
               # Use htmlBr() for line breaks
               htmlBr(),
-              
-              #logbutton
-              htmlLabel('Select y scale : ' , style = list("font-size" = "15pt", "font-weight" = "500", "letter-spacing" = "1px", "color"="#9B2428")),
               htmlBr(),
-              logbutton,
-              
+              htmlBr(),
+              htmlBr(),
               htmlBr(),
               htmlBr(),
               
@@ -236,10 +273,33 @@ app$layout(
               
               htmlBr(),
               htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              
+
+              #logbutton
+              htmlLabel('Select y scale : ' , style = list("font-size" = "15pt", "font-weight" = "500", "letter-spacing" = "1px", "color"="#9B2428")),
+              htmlBr(),
+              logbutton,
+              
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
               
               htmlLabel('Select room type(s) : ', style = list("font-size" = "15pt", "font-weight" = "500", "letter-spacing" = "1px", "color"="#9B2428")),
               checklist2,
               
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
+              htmlBr(),
               htmlBr(),
               htmlBr(),
               htmlBr(),
@@ -257,6 +317,9 @@ app$layout(
                 list(
                   htmlDiv(
                     list(
+                      
+                      htmlBr(),
+                      
                       # map here
                       graph_0,
                       
@@ -341,6 +404,8 @@ app$callback(
   function(value) {
     paste0("You have selected ", value[1], " to ", value[2], " \u20AC") 
   })
+
+
 
 
 app$run_server(debug=TRUE)

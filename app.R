@@ -16,7 +16,6 @@ library(plotly)
 library(purrr)
 library(tibble)
 library(tidyverse)
-library(ggridges)
 
 # Load the data here
 load_clean <- function(path_clean) {

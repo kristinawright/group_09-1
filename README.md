@@ -81,3 +81,7 @@ Asuna is looking to purchase a property in Barcelona to put up for rental on Air
 3. Dashboard sketch
 
 ![](dashboard_sketch.jpg)
+
+## 5. Final App
+
+[click here to view the final app](https://barcelonaapp.herokuapp.com/)
